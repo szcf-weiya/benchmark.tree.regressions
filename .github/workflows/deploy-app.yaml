@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
   # Trigger on push to `main` branch
   push:
-    branches: ["main"]
+    branches: ["master"]
   # Trigger on pull request to all branches (but do not deploy to gh-pages)
   pull_request:
 
