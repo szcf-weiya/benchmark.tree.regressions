@@ -3,7 +3,7 @@ name: Run R script daily
 # Schedule the workflow to run every day at midnight UTC
 on:
   schedule:
-    - cron: '25 0 * * *'  # This runs daily at midnight UTC (adjust as needed)
+    - cron: '35 2 * * *'  # This runs daily at midnight UTC (adjust as needed)
 
 # Define the workflow jobs
 jobs:
@@ -24,6 +24,7 @@ jobs:
       run: |
         install.packages("renv")
         renv::restore()  # Restores packages from the lockfile (if using renv)
+      shell: Rscript {0}
 
     - name: Run R script
       run: |
