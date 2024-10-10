@@ -15,3 +15,12 @@ sim_checkerboard = function(n = 500, p = 200, sigma = 1) {
   y = y0 + rnorm(n) * sigma
   list(x = x, y = y)
 }
+
+sim_linear = function(n = 500, p = 200, sigma = 1) {
+  Sigma = outer(1:p, 1:p, function(j, k) 0.5^abs(j-k) + 0.2 * (j != k) )
+  mu = rep(0, p)
+  x = mvrnorm(n, mu, Sigma)
+  y0 = 2 * x[, 50] + 2 * x[, 100] + 4 * x[, 150]
+  y = y0 + rnorm(n) *sigma
+  list(x = x, y = y)
+}

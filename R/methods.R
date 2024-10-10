@@ -10,3 +10,12 @@ xbart_fit = function(x, y, xtest, num_trees = 10, num_sweeps = 10) {
   ypred = predict(fit, xtest)
   rowMeans(ypred)
 }
+mars_fit = function(x, y, xtest, degree = 1, df.correct = FALSE) {
+  fit = earth::earth(x, y, degree = degree)
+  if (df.correct) {
+    df.res = earth.dof.patch::correct_df(fit)
+    fit = earth::earth(x, y, degree = degree, penalty = df.res$penalty)
+  }
+  ypred = predict(fit, xtest)
+  ypred
+}
