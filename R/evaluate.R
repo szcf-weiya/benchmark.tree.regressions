@@ -1,6 +1,6 @@
 evaluate = function(x, y, fun_method, nfold = 5, seed = 1234, paras = NULL) {
   set.seed(seed)
-  folds = createFolds(y, k = nfold, returnTrain = TRUE)
+  folds = caret::createFolds(y, k = nfold, returnTrain = TRUE)
   errs = numeric(nfold)
   start_time = Sys.time()
   for (i in 1:nfold) {
