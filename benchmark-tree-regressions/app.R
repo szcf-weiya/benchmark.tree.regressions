@@ -32,6 +32,33 @@ ui <- fluidPage(
 
     # Application title
     titlePanel("Benchmarking Tree Regressions"),
+  # Add a descriptive paragraph with highlights and itemization
+  p(
+    "This application benchmarks different tree-based regression models on various (simulated) datasets. The surveyed methods include:"
+  ),
+  # Add an itemized list for key metrics
+  tags$ul(
+    tags$li(tags$strong("Bayesian Additive Regression Trees (BART): "),
+            "with R package ",
+            tags$a(href = "https://cran.r-project.org/web/packages/BART/index.html", "BART")),
+    tags$li(tags$strong("XBART: "),
+            "with R package ",
+            tags$a(href = "https://github.com/JingyuHe/XBART", "XBART")),
+    tags$li(tags$strong("Multivariate Adaptive Regression Splines (MARS): "),
+            "with R package ",
+            tags$a(href = "https://cran.r-project.org/web/packages/earth/index.html", "earth"),
+            " and R package ",
+            tags$a(href = "https://github.com/szcf-weiya/earth.dof.patch", "earth.dof.patch"),
+            " with a modified degrees of freedom (df).")
+  ),
+
+  p("The datasets with detailed generating model can be selected from the following drop-down menu."),
+
+  p("The benchmarking results are automatically generated through GitHub Actions."),
+
+  p(tags$strong("This is an ongoing project, more methods and datasets will be added. We welcome and appreciate any comments.")),
+
+  p(tags$strong("Tips:"), "The figures are interactive, powered by Plotly. For example, you can hide or highlight methods by clicking on their names in the legend."),
 
     fluidRow(
       column(3,
@@ -56,18 +83,28 @@ ui <- fluidPage(
                       ),
                column(6,
                       card(
-                        card_header("Running Time", container = htmltools::h3),
+                        card_header("Running Time (seconds)", container = htmltools::h3),
                         plotlyOutput("ly_timeplot")
                       )
               )
              )
       )
+    ),
+  # Add a footer at the bottom
+  tags$footer(
+    div(
+      style = "text-align: center; padding: 10px; position: fixed; bottom: 0; width: 100%; background-color: #f8f9fa; border-top: 1px solid #e9ecef;",
+      HTML("&copy; 2024 "),
+      tags$a(href = "https://github.com/szcf-weiya/", "szcf-weiya"),
+      HTML(". All rights reserved. Last compiled on: "),
+      Sys.Date()
     )
+  )
 )
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
-    df = readRDS("res.rds")
+    df = readRDS("res256.rds")
     df1 = eventReactive(input$data, {
       req(input$data)
       subset(df, data.model == input$data)

@@ -3,7 +3,7 @@ name: Run R script daily
 # Schedule the workflow to run every day at midnight UTC
 on:
   schedule:
-    - cron: '35 2 * * *'  # This runs daily at midnight UTC (adjust as needed)
+    - cron: '35 17 * * *'  # This runs daily at midnight UTC (adjust as needed)
 
 # Define the workflow jobs
 jobs:
@@ -27,6 +27,14 @@ jobs:
         sudo apt-get install -y libgsl-dev libboost-dev
         gsl-config --libs
         gsl-config --cflags
+
+    - name: Cache renv library
+      uses: actions/cache@v3
+      with:
+        path: renv/library
+        key: ${{ runner.os }}-renv-${{ hashFiles('renv.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-renv-
 
     # Step 3: Install R package dependencies (if any)
     - name: Install R package dependencies

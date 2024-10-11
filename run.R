@@ -2,14 +2,14 @@ source("R/datasets.R")
 source("R/evaluate.R")
 source("R/methods.R")
 
-lst_methods = c("bart_fit", rep("xbart_fit", 3), rep("mars_fit", 4))
+lst_methods = c("bart_fit", rep("xbart_fit", 1), rep("mars_fit", 4))
 names(lst_methods) = c("BART",
-                       "XBART_10_10", "XBART_5_10", "XBART_10_5",
+                       "XBART", #"XBART_10_10", "XBART_5_10", "XBART_10_5",
                        "MARS_d1", "MARS_d2", "MARS_d1_df", "MARS_d2_df")
 lst_methods_paras = list(NULL,
                          list(num_trees = 10, num_sweeps = 10),
-                         list(num_trees = 5, num_sweeps = 10),
-                         list(num_trees = 10, num_sweeps = 5),
+                         #list(num_trees = 5, num_sweeps = 10),
+                         #list(num_trees = 10, num_sweeps = 5),
                          list(degree = 1, df.correct = FALSE),
                          list(degree = 2, df.correct = FALSE),
                          list(degree = 1, df.correct = TRUE),
@@ -17,6 +17,7 @@ lst_methods_paras = list(NULL,
 stopifnot(length(lst_methods) == length(lst_methods_paras))
 df = benchmark(c("sim_friedman", "sim_checkerboard"),
                lst_methods, lst_methods_paras,
-               ns = c(100, 200, 500, 1000), ps = c(200, 400, 600, 800)
+               ns = c(100, 200, 500, 1000),
+               ps = c(200, 400, 600)
 )
 saveRDS(df, "benchmark-tree-regressions/res-action.rds")

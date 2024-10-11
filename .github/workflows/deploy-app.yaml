@@ -21,24 +21,16 @@ jobs:
       - uses: rstudio/shiny-workflows/setup-r-package@v1
         with:
           packages: |
-            renv
             posit-dev/r-shinylive
-            sessioninfo
+            bslib
+            ggplot2
+            plotly
           cache-version: ${{ github.event.inputs.cache-version }}
-
-      - name: Find package dependencies
-        shell: Rscript {0}
-        id: packages
-        run: |
-          # Find package dependencies using {renv} and install with {pak}
-          pak::pak(
-            unique(renv::dependencies(".")$Package)
-          )
 
       - name: Build site
         shell: Rscript {0}
         run: |
-          shinylive::export(".", "site")
+          shinylive::export("benchmark-tree-regressions/", "site")
 
       - name: Upload site artifact
         if: github.ref == 'refs/heads/main'
