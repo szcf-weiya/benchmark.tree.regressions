@@ -54,7 +54,7 @@ ui <- fluidPage(
 
   p("The datasets with detailed generating model can be selected from the following drop-down menu."),
 
-  p("The benchmarking results are automatically generated through GitHub Actions."),
+  #p("The benchmarking results are automatically generated through GitHub Actions."),
 
   p(tags$strong("This is an ongoing project, more methods and datasets will be added. We welcome and appreciate any comments.")),
 

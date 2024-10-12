@@ -24,7 +24,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update -y
-        sudo apt-get install -y libgsl-dev libboost-dev
+        sudo apt-get install -y libgsl-dev libboost-dev libcurl4-openssl-dev
         gsl-config --libs
         gsl-config --cflags
 

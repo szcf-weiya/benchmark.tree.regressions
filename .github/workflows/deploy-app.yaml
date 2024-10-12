@@ -1,12 +1,6 @@
 name: Deploy app
 
-on:
-  workflow_call:
-    inputs:
-      cache-version:
-        type: string
-        default: "1"
-        required: false
+on: [push]
 
 jobs:
   build:
