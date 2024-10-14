@@ -27,7 +27,7 @@ jobs:
           shinylive::export("benchmark-tree-regressions/", "site")
 
       - name: Upload site artifact
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/master'
         uses: actions/upload-pages-artifact@v3
         with:
           path: "site"
