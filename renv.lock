@@ -1693,6 +1693,20 @@
       ],
       "Hash": "460a5e0fe46a80ef87424ad216028014"
     },
+    "xgboost": {
+      "Package": "xgboost",
+      "Version": "1.7.8.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "Matrix",
+        "R",
+        "data.table",
+        "jsonlite",
+        "methods"
+      ],
+      "Hash": "f7aa70849f72103d78c99df10eae6164"
+    },
     "xtable": {
       "Package": "xtable",
       "Version": "1.8-4",

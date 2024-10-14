@@ -19,3 +19,9 @@ mars_fit = function(x, y, xtest, degree = 1, df.correct = FALSE) {
   ypred = predict(fit, xtest)
   ypred
 }
+
+xgboost_fit = function(x, y, xtest) {
+  fit = xgboost::xgboost(data = x, label = y, nrounds = 100)
+  ypred = predict(fit, xtest)
+  ypred
+}

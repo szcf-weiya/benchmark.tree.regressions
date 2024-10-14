@@ -17,7 +17,8 @@ lst_methods_paras = list(NULL,
 stopifnot(length(lst_methods) == length(lst_methods_paras))
 df = benchmark(c("sim_friedman", "sim_checkerboard"),
                lst_methods, lst_methods_paras,
-               ns = c(100, 200, 500, 1000),
-               ps = c(200, 400, 600)
+               ns = c(100, 200, 500),
+               #ps = c(200, 400, 600)
+               ps = c(200, 400)
 )
 saveRDS(df, "benchmark-tree-regressions/res-action.rds")
