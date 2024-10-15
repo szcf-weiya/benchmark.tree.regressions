@@ -3,7 +3,7 @@ name: Run R script daily
 # Schedule the workflow to run every day at midnight UTC
 on:
   schedule:
-    - cron: '35 16 * * *'  # This runs daily at midnight UTC (adjust as needed)
+    - cron: '38 19 * * *'  # This runs daily at midnight UTC (adjust as needed)
 
 # Define the workflow jobs
 jobs:
@@ -49,7 +49,7 @@ jobs:
 
     # Step 5: Save the results (as an artifact)
     - name: Upload results as an artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: results
         path: benchmark-tree-regressions/res-action.rds  # This should point to where the results are saved

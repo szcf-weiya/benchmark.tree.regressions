@@ -68,11 +68,6 @@ ui <- fluidPage(
 
     fluidRow(
       column(3,
-             radioButtons("res_source",
-                          "Running Platform:",
-                          choices = c("My Laptop" = "default",
-                                      "GitHub Action" = "github"),
-                          selected = "default"),
              selectInput("data",
                          "Data:",
                          choices = c(Friedman = "sim_friedman", Checkerboard = "sim_checkerboard"),
@@ -115,17 +110,13 @@ ui <- fluidPage(
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
-    df = eventReactive(input$res_source, {
-      req(input$res_source)
-      if (input$res_source == "github") {
-        readRDS("res_action.rds")
-      } else {
-        readRDS("res256.rds")
-      }
-    })
-    df1 = eventReactive(c(input$data, df()), {
+    if (file.exists("res_action.rds"))
+      df = readRDS("res_action.rds")
+    else
+      df = readRDS("res256.rds")
+    df1 = eventReactive(input$data, {
       req(input$data)
-      subset(df(), data.model == input$data)
+      subset(df, data.model == input$data)
     })
     output$formula = renderUI({
       if (input$data == "sim_friedman") {
