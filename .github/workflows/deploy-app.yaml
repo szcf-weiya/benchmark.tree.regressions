@@ -21,6 +21,15 @@ jobs:
             plotly
           cache-version: ${{ github.event.inputs.cache-version }}
 
+      # download artifacts
+      - uses: actions/download-artifact@v4
+        with:
+          name: results
+          path: benchmark-tree-regressions
+
+      - name: Display structure of downloaded files
+        run: ls -R benchmark-tree-regressions
+
       - name: Build site
         shell: Rscript {0}
         run: |
