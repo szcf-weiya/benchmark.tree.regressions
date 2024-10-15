@@ -25,3 +25,10 @@ xgboost_fit = function(x, y, xtest) {
   ypred = predict(fit, xtest)
   ypred
 }
+
+ranger_fit = function(x, y, xtest, num.trees = 500) {
+  df = data.frame(x, y)
+  fit = ranger::ranger(y ~ ., data = df, num.trees = num.trees)
+  ypred = predict(fit, data.frame(xtest))
+  ypred$predictions
+}

@@ -3,7 +3,7 @@ name: Run R script daily
 # Schedule the workflow to run every day at midnight UTC
 on:
   schedule:
-    - cron: '35 17 * * *'  # This runs daily at midnight UTC (adjust as needed)
+    - cron: '35 16 * * *'  # This runs daily at midnight UTC (adjust as needed)
 
 # Define the workflow jobs
 jobs:
