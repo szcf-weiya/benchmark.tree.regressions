@@ -1,6 +1,10 @@
 name: Deploy app
 
-on: [push]
+on:
+  workflow_run:
+    workflows: ["Run Scripts"]
+    types:
+      - completed
 
 jobs:
   build:
