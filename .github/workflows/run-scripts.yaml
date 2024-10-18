@@ -4,7 +4,7 @@ on: [push]
 
 # Define the workflow jobs
 jobs:
-  run-r-script:
+  run-script:
     runs-on: ubuntu-latest
 
     steps:
@@ -50,3 +50,66 @@ jobs:
       with:
         name: results
         path: benchmark-tree-regressions/res-action.rds  # This should point to where the results are saved
+
+  build:
+    if: github.ref == 'refs/heads/master'
+    needs: run-script
+
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_KEEP_PKG_SOURCE: yes
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: rstudio/shiny-workflows/setup-r-package@v1
+        with:
+          packages: |
+            posit-dev/r-shinylive
+            bslib
+            ggplot2
+            plotly
+          cache-version: ${{ github.event.inputs.cache-version }}
+
+      - name: Display structure of downloaded files
+        run: ls -R benchmark-tree-regressions
+
+      # download artifacts
+      - uses: actions/download-artifact@v4
+        with:
+          name: results
+          path: benchmark-tree-regressions
+
+      - name: Build site
+        shell: Rscript {0}
+        run: |
+          shinylive::export("benchmark-tree-regressions/", "site")
+
+      - name: Upload site artifact
+        if: github.ref == 'refs/heads/master'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "site"
+
+  deploy:
+    if: github.ref == 'refs/heads/master'
+    needs: build
+
+    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
+    permissions:
+      pages: write # to deploy to Pages
+      id-token: write # to verify the deployment originates from an appropriate source
+
+    # Deploy to the github-pages environment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    # Specify runner + deployment step
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+

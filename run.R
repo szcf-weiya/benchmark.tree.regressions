@@ -21,9 +21,9 @@ lst_methods_paras = list(NULL,
                          list(num.trees = 1000),
                          NULL)
 stopifnot(length(lst_methods) == length(lst_methods_paras))
-df = benchmark(c("sim_friedman", "sim_checkerboard", "sim_linear"),
+df = benchmark(c("sim_friedman"),
                lst_methods, lst_methods_paras,
-               ns = c(100, 500),
+               ns = c(100),
                ps = c(200)
 )
 saveRDS(df, "benchmark-tree-regressions/res-action.rds")
