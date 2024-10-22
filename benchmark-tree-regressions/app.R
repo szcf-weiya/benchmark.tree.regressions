@@ -110,8 +110,8 @@ ui <- fluidPage(
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
-    if (file.exists("res_action.rds"))
-      df = readRDS("res_action.rds")
+    if (file.exists("res-action.rds"))
+      df = readRDS("res-action.rds")
     else
       df = readRDS("res256.rds")
     df1 = eventReactive(input$data, {
