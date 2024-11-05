@@ -28,15 +28,10 @@ df = para.benchmark(c("sim_friedman", "sim_checkerboard", "sim_linear"),
                ps = c(200, 400, 600, 800),
                ncores = 10
 )
-saveRDS(df, "benchmark-tree-regressions/res-action.rds")
+saveRDS(df, "benchmark-tree-regressions/res-hpc.rds")
 
-# df = benchmark(c("sim_friedman", "sim_checkerboard", "sim_linear"),
-#                lst_methods, lst_methods_paras,
-#                ns = c(100, 500, 1000),
-#                ps = c(200, 400, 800)
-# )
-# saveRDS(df, "benchmark-tree-regressions/res-action.rds")
 
+## use a subset for debug
 debug_small = function() {
   lst_methods = c(#"bart_fit",
                   rep("xbart_fit", 1),

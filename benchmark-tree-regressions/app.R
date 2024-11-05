@@ -137,9 +137,9 @@ server <- function(input, output) {
   if (file.exists("res-action.rds"))
     df.action = readRDS("res-action.rds")
   else
-    df.action = readRDS("res256.rds")
+    df.action = readRDS("res-hpc.rds")
   df.action$group = sapply(df.action$method, function(x) strsplit(x, "_")[[1]][1])
-  df.local = readRDS("res256.rds")
+  df.local = readRDS("res-hpc.rds")
   df0 = eventReactive(input$data.action, {
     req(input$data.action)
     subset(df.action, data.model == input$data.action)
