@@ -15,6 +15,14 @@ library(plotly)
 ui <- navbarPage(
   title = "Benchmarking Tree Regressions",
   theme = bs_theme(version = 5),
+  collapsible = TRUE,
+  header = tagList(
+    tags$style(HTML("
+      body {
+        font-size: 18px; /* Default font size for body */
+      }
+    "))
+  ),
   tabPanel("Introduction",
            withMathJax(),
            tags$script(src = "https://cdn.plot.ly/plotly-2.11.1.min.js"),
@@ -99,13 +107,10 @@ ui <- navbarPage(
              )
            )
   ),
-  # Add a footer at the bottom
-  tags$footer(
+  footer = tagList(
     div(
       style = "text-align: center; padding: 10px; position: fixed; bottom: 0; width: 100%; background-color: #f8f9fa; border-top: 1px solid #e9ecef;",
-      HTML("&copy; 2024 "),
-      tags$a(href = "https://github.com/szcf-weiya/", "szcf-weiya"),
-      HTML(". All rights reserved.")
+      HTML('&copy; 2024 <a href="https://hohoweiya.xyz/">Lijun Wang</a>. All rights reserved.')
     )
   )
 )
