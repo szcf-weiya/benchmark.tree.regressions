@@ -1088,6 +1088,17 @@
       ],
       "Hash": "6e8b139c1904f5e9e14c69db64453bbe"
     },
+    "pbmcapply": {
+      "Package": "pbmcapply",
+      "Version": "1.5.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "parallel",
+        "utils"
+      ],
+      "Hash": "bf173fb42b60f8f404f7a9f9c3f95d0d"
+    },
     "pillar": {
       "Package": "pillar",
       "Version": "1.9.0",

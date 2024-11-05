@@ -64,6 +64,40 @@ benchmark = function(arr_data, arr_methods, arr_paras, ns = c(500), ps = c(200))
   return(df)
 }
 
+para.benchmark = function(arr_data, arr_methods, arr_paras, ns = c(500), ps = c(200), ncores = 10) {
+  ndata = length(arr_data)
+  nmethod = length(arr_methods)
+  names.method = names(arr_methods)
+  if (is.null(names.method)) names.method = arr_methods
+  df = matrix(0, ncol = 6, nrow = 0)
+  single_benchmark = function(i, n, p) {
+    df = matrix(0, ncol = 6, nrow = nmethod)
+    data = get(arr_data[i])(n = n, p = p)
+    for (m in 1:nmethod) {
+      method = arr_methods[m]
+      tmp = evaluate(data$x, data$y, get(method), paras = arr_paras[[m]])
+      df[m, ] = c(arr_data[i], n, p, names.method[m], unlist(tmp))
+    }
+    return(df)
+  }
+  indices = expand.grid(i = 1:ndata, n = ns, p = ps)
+  res = pbmcapply::pbmclapply(1:nrow(indices), function(idx) {
+    i = indices[idx, "i"]
+    n = indices[idx, "n"]
+    p = indices[idx, "p"]
+    single_benchmark(i, n, p)
+  }, mc.cores = ncores)
+  df = do.call(rbind, res)
+  df = as.data.frame(df)
+  colnames(df) = c("data.model", "n", "p", "method", "cv.error", "runtime")
+  df$n = as.integer(df$n)
+  df$p = as.integer(df$p)
+  df$cv.error = as.numeric(df$cv.error)
+  df$runtime = as.numeric(df$runtime)
+  return(df)
+}
+
+
 scripts = function() {
   lst_methods = c("bart_fit", rep("xbart_fit", 3), rep("mars_fit", 4))
   names(lst_methods) = c("BART",

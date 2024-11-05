@@ -42,7 +42,7 @@ jobs:
 
     - name: Run R script
       run: |
-        Rscript run.R
+        Rscript run-action.R
 
     # Step 5: Save the results (as an artifact)
     - name: Upload results as an artifact
