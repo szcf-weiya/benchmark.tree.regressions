@@ -56,5 +56,6 @@ sim_max = function(n = 500, p = 200, sigma = 1, structure = "indep") {
   x = gen_x(n, p, structure = structure)
   y0 = apply(x, 1, function(x) max(x[1:3]))
   y = y0 + rnorm(n) * sigma
+  list(x = x, y = y)
 }
 

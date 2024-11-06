@@ -20,7 +20,7 @@ To interactively display the results, we adopt the Shiny App, and the related fi
 
 Note that a typical shiny app is server-based. With the help of `shinylive`, we deploy the shiny website on the GitHub pages.
 
-## Run Locally
+## :rocket: Run Locally
 
 The repository used `renv` to manage the compatible R packages. It is also better to use the same R version 4.1.2 in case.
 
@@ -34,3 +34,13 @@ Next, you can check the scripts [`run-local.R`](run-local.R) and [`run-action.R`
 
 Due to the limited computational resources, [`run-action.R`](run-action.R) take shorter time to finish.
 
+### Yale Mccelary HPC
+
+Specifically, the current local results are run on the Yale Mccelary HPC.
+
+```bash
+$ module load R/4.2.0-foss-2020b
+$ R
+> renv::restore() # restore packages from the lockfile
+> system.time({source("run-local.R")})
+```
