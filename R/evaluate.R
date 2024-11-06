@@ -21,75 +21,62 @@ evaluate = function(x, y, fun_method, nfold = 5, seed = 1234, paras = NULL) {
   list(cverr = cverr, runtime = runtime)
 }
 
-benchmark = function(arr_data, arr_methods, arr_paras, ns = c(500), ps = c(200)) {
+benchmark = function(arr_data, arr_methods, arr_paras, arr_structures = c("indep"), ns = c(500), ps = c(200)) {
   ndata = length(arr_data)
   nmethod = length(arr_methods)
   names.method = names(arr_methods)
   if (is.null(names.method)) names.method = arr_methods
-  df = matrix(0, ncol = 6, nrow = 0)
+  df = matrix(0, ncol = 7, nrow = 0)
   for (i in 1:ndata) {
     for (n in ns) {
       for (p in ps) {
-        data = get(arr_data[i])(n = n, p = p)
-        for (m in 1:nmethod) {
-          method = arr_methods[m]
-          tmp = evaluate(data$x, data$y, get(method), paras = arr_paras[[m]])
-          df = rbind(df, c(arr_data[i], n, p, names.method[m], unlist(tmp)))
+        for (s in arr_structures) {
+          data = get(arr_data[i])(n = n, p = p, structure = s)
+          for (m in 1:nmethod) {
+            method = arr_methods[m]
+            tmp = evaluate(data$x, data$y, get(method), paras = arr_paras[[m]])
+            df = rbind(df, c(arr_data[i], s, n, p, names.method[m], unlist(tmp)))
+          }
         }
       }
     }
   }
   df = as.data.frame(df)
-  colnames(df) = c("data.model", "n", "p", "method", "cv.error", "runtime")
+  colnames(df) = c("data.model", "structure", "n", "p", "method", "cv.error", "runtime")
   df$n = as.integer(df$n)
   df$p = as.integer(df$p)
   df$cv.error = as.numeric(df$cv.error)
   df$runtime = as.numeric(df$runtime)
-  # res = list()
-  # for (i in 1:ndata) {
-  #   res[[arr_data[i]]] = list()
-  #   for (n in ns) {
-  #     res[[i]][[as.character(n)]] = list()
-  #     for (p in ps) {
-  #       res[[i]][[as.character(n)]][[as.character(p)]] = list()
-  #       data = get(arr_data[i])(n = n, p = p)
-  #       for (method in arr_methods) {
-  #         tmp = evaluate(data$x, data$y, get(method))
-  #         res[[i]][[as.character(n)]][[as.character(p)]][[method]] = tmp
-  #         df = rbind(df, c(arr_data[i], n, p, method, unlist(tmp)))
-  #       }
-  #     }
-  #   }
-  # }
   return(df)
 }
 
-para.benchmark = function(arr_data, arr_methods, arr_paras, ns = c(500), ps = c(200), ncores = 10) {
+para.benchmark = function(arr_data, arr_methods, arr_paras, arr_structures = c("indep"), ns = c(500), ps = c(200), ncores = 10) {
   ndata = length(arr_data)
   nmethod = length(arr_methods)
   names.method = names(arr_methods)
   if (is.null(names.method)) names.method = arr_methods
-  df = matrix(0, ncol = 6, nrow = 0)
-  single_benchmark = function(i, n, p) {
-    df = matrix(0, ncol = 6, nrow = nmethod)
-    data = get(arr_data[i])(n = n, p = p)
+  df = matrix(0, ncol = 7, nrow = 0)
+  single_benchmark = function(i, n, p, s) {
+    df = matrix(0, ncol = 7, nrow = nmethod)
+    data = get(arr_data[i])(n = n, p = p, structure = s)
     for (m in 1:nmethod) {
       method = arr_methods[m]
       tmp = evaluate(data$x, data$y, get(method), paras = arr_paras[[m]])
-      df[m, ] = c(arr_data[i], n, p, names.method[m], unlist(tmp))
+      df[m, ] = c(arr_data[i], s, n, p, names.method[m], unlist(tmp))
     }
     return(df)
   }
-  indices = expand.grid(i = 1:ndata, n = ns, p = ps)
+  indices = expand.grid(i = 1:ndata, n = ns, p = ps, s = arr_structures)
   res = pbmcapply::pbmclapply(1:nrow(indices), function(idx) {
     i = indices[idx, "i"]
     n = indices[idx, "n"]
     p = indices[idx, "p"]
-    single_benchmark(i, n, p)
+    s = indices[idx, "s"]
+    single_benchmark(i, n, p, s)
   }, mc.cores = ncores)
   df = do.call(rbind, res)
   df = as.data.frame(df)
-  colnames(df) = c("data.model", "n", "p", "method", "cv.error", "runtime")
+  colnames(df) = c("data.model", "structure", "n", "p", "method", "cv.error", "runtime")
   df$n = as.integer(df$n)
   df$p = as.integer(df$p)
   df$cv.error = as.numeric(df$cv.error)

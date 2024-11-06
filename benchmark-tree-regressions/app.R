@@ -45,11 +45,16 @@ ui <- navbarPage(
            uiOutput("action_md"),
            fluidRow(
              column(3,
+                    withMathJax(HTML("$$\\mathbf{X}\\in {\\mathrm{I\\!R}}^{n\\times p}, y\\in {\\mathrm{I\\!R}}^n$$")),
+                    selectInput("data.action.x",
+                                "Structure of X:",
+                                choices = c(Independent = "indep", `AR(1)` = "ar1", `AR(1)+` = "ar1+", Factor = "factor"),
+                                selected = "indep"),
+                    uiOutput("formula.action.x"),
                     selectInput("data.action",
-                                "Data:",
-                                choices = c(Friedman = "sim_friedman", Checkerboard = "sim_checkerboard", Linear = "sim_linear"),
+                                "Data Model:",
+                                choices = c(Friedman = "sim_friedman", Checkerboard = "sim_checkerboard", Linear = "sim_linear", Max = "sim_max"),
                                 selected = "sim_friedman"),
-                    withMathJax(HTML("$$x\\in {\\mathrm{I\\!R}}^{n\\times p}, y\\in {\\mathrm{I\\!R}}^n$$")),
                     uiOutput("formula.action")
              ),
              column(9,
@@ -78,11 +83,16 @@ ui <- navbarPage(
            ),
            fluidRow(
              column(3,
+                    withMathJax(HTML("$$\\mathbf{X}\\in {\\mathrm{I\\!R}}^{n\\times p}, y\\in {\\mathrm{I\\!R}}^n$$")),
+                    selectInput("data.x",
+                                "Structure of X:",
+                                choices = c(Independent = "indep", `AR(1)` = "ar1", `AR(1)+` = "ar1+", Factor = "factor"),
+                                selected = "indep"),
+                    uiOutput("formula.x"),
                     selectInput("data",
-                                "Data:",
-                                choices = c(Friedman = "sim_friedman", Checkerboard = "sim_checkerboard", Linear = "sim_linear"),
+                                "Data Model:",
+                                choices = c(Friedman = "sim_friedman", Checkerboard = "sim_checkerboard", Linear = "sim_linear", Max = "sim_max"),
                                 selected = "sim_friedman"),
-                    withMathJax(HTML("$$x\\in {\\mathrm{I\\!R}}^{n\\times p}, y\\in {\\mathrm{I\\!R}}^n$$")),
                     uiOutput("formula"),
                     selectInput("x.axis",
                                 "x-axis:",
@@ -122,7 +132,7 @@ server <- function(input, output) {
 
   - **Bayesian Additive Regression Trees (BART)**: with R package [BART](https://cran.r-project.org/web/packages/BART/index.html)
   - **XBART**: with R package [XBART](https://github.com/JingyuHe/XBART)
-  - **Random Forests**: with R package [ranger](https://cran.r-project.org/web/packages/ranger/index.html)
+  - **Random Forests**: with R package [ranger](https://cran.r-project.org/web/packages/ranger/index.html) and [randomForest](https://cran.r-project.org/web/packages/randomForest/index.html)
   - **XGBoost**: with R package [xgboost](https://cran.r-project.org/web/packages/xgboost/index.html)
   - **Multivariate Adaptive Regression Splines (MARS)**: with R package [earth](https://cran.r-project.org/web/packages/earth/index.html) and R package [earth.dof.patch](https://github.com/szcf-weiya/earth.dof.patch) with a modified degrees of freedom (df).
 
@@ -139,19 +149,29 @@ server <- function(input, output) {
   output$action_md = renderUI({
     HTML(markdown::markdownToHTML(text = action_md, fragment.only = TRUE))
   })
-  if (file.exists("res-action.rds"))
-    df.action = readRDS("res-action.rds")
-  else
-    df.action = readRDS("res-hpc.rds")
-  df.action$group = sapply(df.action$method, function(x) strsplit(x, "_")[[1]][1])
-  df.local = readRDS("res-hpc.rds")
-  df0 = eventReactive(input$data.action, {
+  if (file.exists("res-debug.rds")) {
+    df.action = readRDS("res-debug.rds")
+    df.action$group = sapply(df.action$method, function(x) strsplit(x, "_")[[1]][1])
+    df.local = readRDS("res-debug.rds")
+  } else {
+    if (file.exists("res-action.rds"))
+      df.action = readRDS("res-action.rds")
+    else
+      df.action = readRDS("res-hpc.rds")
+    df.action$group = sapply(df.action$method, function(x) strsplit(x, "_")[[1]][1])
+    df.local = readRDS("res-hpc.rds")
+  }
+  df0 = eventReactive(c(input$data.action.x, input$data.action), {
     req(input$data.action)
-    subset(df.action, data.model == input$data.action)
+    req(input$data.action.x)
+    df.tmp = subset(df.action, data.model == input$data.action)
+    subset(df.tmp, structure == input$data.action.x)
   })
-  df1 = eventReactive(input$data, {
+  df1 = eventReactive(c(input$data, input$data.x), {
     req(input$data)
-    subset(df.local, data.model == input$data)
+    req(input$data.x)
+    df.tmp = subset(df.local, data.model == input$data)
+    subset(df.tmp, structure == input$data.x)
   })
   fun_formula = function(x) {
     if (x == "sim_friedman") {
@@ -160,6 +180,25 @@ server <- function(input, output) {
       withMathJax(HTML("$$y = 2x_{50}x_{100} + 2x_{150}x_{200} + N(0, 1)$$"))
     } else if (x == "sim_linear") {
       withMathJax(HTML("$$\\Sigma_{jk} = 0.5^{\\vert j-k\\vert} + 0.2I(i\\neq j)\\\\y = 2x_{50} + 2x_{100} + 4x_{150} + N(0, 1)$$"))
+    } else if (x == "sim_max") {
+      withMathJax(HTML("$$y = \\max(x_1, x_2, x_3) + N(0, 1)$$"))
+    }
+  }
+  fun_formula_x = function(x) {
+    if (x == "indep") {
+      withMathJax(HTML("$$X_{ij}\\sim_{i.i.d.} N(0, 1), i=1,\\ldots,n; j=1,\\ldots,p$$"))
+    } else if (x == "ar1") {
+      withMathJax(HTML("$$X\\sim N(0_p, \\Sigma)\\\\
+                       \\Sigma_{jk} = 0.9^{\\vert j-k\\vert}$$"))
+    } else if (x == "ar1+") {
+      withMathJax(HTML("$$X\\sim N(0_p, \\Sigma)\\\\\
+                       \\Sigma_{jk} = 0.5^{\\vert j-k\\vert} + 0.2I(i\\neq j)$$"))
+    } else if (x == "factor") {
+      withMathJax(HTML("$$\\mathbf{X = (BF)}^\\top+\\epsilon\\\\
+                       \\mathbf{F_{k\\times n}}\\sim N(0, 1), k=p/5\\\\
+                       \\sum_{j=1}^k \\mathbf{B}_{ij}=1, \\sum_{i=1}^p\\mathbf{B}_{ij}=5\\\\
+                       \\epsilon_{n\\times p} \\sim N(0, 0.01k)
+                       $$"))
     }
   }
   output$formula = renderUI({
@@ -167,6 +206,12 @@ server <- function(input, output) {
   })
   output$formula.action = renderUI({
     fun_formula(input$data.action)
+  })
+  output$formula.x = renderUI({
+    fun_formula_x(input$data.x)
+  })
+  output$formula.action.x = renderUI({
+    fun_formula_x(input$data.action.x)
   })
   output$n_or_p = renderUI({
     if (input$x.axis == "n")
