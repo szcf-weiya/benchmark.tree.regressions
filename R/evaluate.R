@@ -17,7 +17,7 @@ evaluate = function(x, y, fun_method, nfold = 5, seed = 1234, paras = NULL) {
   }
   end_time = Sys.time()
   cverr = mean(errs)
-  runtime = as.numeric(end_time - start_time)
+  runtime = as.numeric(difftime(end_time, start_time, units = "secs"))
   list(cverr = cverr, runtime = runtime)
 }
 
