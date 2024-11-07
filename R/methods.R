@@ -1,5 +1,5 @@
-bart_fit = function(x, y, xtest) {
-  fit = BART::gbart(x, y)
+bart_fit = function(x, y, xtest, ntree = 200) {
+  fit = BART::gbart(x, y, ntree = ntree)
   ypred = predict(fit, xtest)
   colMeans(ypred)
 }

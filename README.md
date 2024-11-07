@@ -43,4 +43,6 @@ $ module load R/4.2.0-foss-2020b
 $ R
 > renv::restore() # restore packages from the lockfile
 > system.time({source("run-local.R")})
+      user     system    elapsed
+348314.125   5609.474  41027.405
 ```

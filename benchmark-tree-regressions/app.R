@@ -12,112 +12,119 @@ library(bslib)
 library(ggplot2)
 library(plotly)
 
-ui <- navbarPage(
-  title = "Benchmarking Tree Regressions",
-  theme = bs_theme(version = 5),
-  collapsible = TRUE,
-  header = tagList(
+tab_ga = tabPanel("GitHub Action",
+                  uiOutput("action_md"),
+                  fluidRow(
+                    column(3,
+                           withMathJax(HTML("$$\\mathbf{X}\\in {\\mathrm{I\\!R}}^{n\\times p}, y\\in {\\mathrm{I\\!R}}^n$$")),
+                           selectInput("data.action.x",
+                                       "Structure of X:",
+                                       choices = c(Independent = "indep", `AR(1)` = "ar1", `AR(1)+` = "ar1+", Factor = "factor"),
+                                       selected = "indep"),
+                           uiOutput("formula.action.x"),
+                           selectInput("data.action",
+                                       "Data Model:",
+                                       choices = c(Friedman = "sim_friedman", Checkerboard = "sim_checkerboard", Linear = "sim_linear", Max = "sim_max"),
+                                       selected = "sim_friedman"),
+                           uiOutput("formula.action")
+                    ),
+                    column(9,
+                           fluidRow(
+                             column(6,
+                                    card(
+                                      card_header("5-fold CV Error", container = htmltools::h3),
+                                      plotlyOutput("ly_errplot_action"))
+                             ),
+                             column(6,
+                                    card(
+                                      card_header("Running Time (seconds)", container = htmltools::h3),
+                                      plotlyOutput("ly_timeplot_action")
+                                    )
+                             )
+                           )
+                    )
+                  )
+)
+tab_local =   tabPanel("Local Results",
+                       p(
+                         "Due to limited computational resource (e.g., maximum running time
+             is 6 hours and it does not support parallel computing with too many cores)
+             by GitHub actions, here we present more results which is run locally on HPC.
+             You can also reproduce the results on your own machines."
+                       ),
+                       fluidRow(
+                         column(3,
+                                withMathJax(HTML("$$\\mathbf{X}\\in {\\mathrm{I\\!R}}^{n\\times p}, y\\in {\\mathrm{I\\!R}}^n$$")),
+                                selectInput("data.x",
+                                            "Structure of X:",
+                                            choices = c(Independent = "indep", `AR(1)` = "ar1", `AR(1)+` = "ar1+", Factor = "factor"),
+                                            selected = "indep"),
+                                uiOutput("formula.x"),
+                                selectInput("data",
+                                            "Data Model:",
+                                            choices = c(Friedman = "sim_friedman", Checkerboard = "sim_checkerboard", Linear = "sim_linear", Max = "sim_max"),
+                                            selected = "sim_friedman"),
+                                uiOutput("formula"),
+                                selectInput("x.axis",
+                                            "x-axis:",
+                                            choices = c(`Sample Size (n)` = "n", `Number of Features (p)` = "p"),
+                                            selected = "n"),
+                                uiOutput("n_or_p")
+                         ),
+                         column(9,
+                                fluidRow(
+                                  column(6,
+                                         card(
+                                           card_header("5-fold CV Error", container = htmltools::h3),
+                                           plotlyOutput("ly_errplot"))
+                                  ),
+                                  column(6,
+                                         card(
+                                           card_header("Running Time (seconds)", container = htmltools::h3),
+                                           plotlyOutput("ly_timeplot")
+                                         )
+                                  )
+                                )
+                         )
+                       )
+)
+ui <- fluidPage(
+  tags$header(
     tags$style(HTML("
       body {
         font-size: 18px; /* Default font size for body */
       }
     "))
   ),
-  tabPanel("Introduction",
-           withMathJax(),
-           tags$script(src = "https://cdn.plot.ly/plotly-2.11.1.min.js"),
-           tags$head(
-             tags$script(
-               HTML(
-                 "
+  fluidRow(
+    wellPanel(
+      h2("Benchmarking Tree Regressions"),
+      withMathJax(),
+      tags$script(src = "https://cdn.plot.ly/plotly-2.11.1.min.js"),
+      tags$head(
+        tags$script(
+          HTML(
+            "
       MathJax.Hub.Config({
         tex2jax: { inlineMath: [['$', '$'], ['\\\\(', '\\\\)']] },
         'HTML-CSS': { scale: 90, linebreaks: { automatic: true } },
         SVG: { scale: 90, linebreaks: { automatic: true } }
       });
       "
-               )
-             )
-           ),
-           uiOutput("intro_md")
+          )
+        )
+      ),
+      uiOutput("intro_md")
+    )),
+  fluidRow(
+    tabsetPanel(
+      tab_ga,
+      tab_local
+    )
   ),
-  tabPanel("GitHub Action",
-           uiOutput("action_md"),
-           fluidRow(
-             column(3,
-                    withMathJax(HTML("$$\\mathbf{X}\\in {\\mathrm{I\\!R}}^{n\\times p}, y\\in {\\mathrm{I\\!R}}^n$$")),
-                    selectInput("data.action.x",
-                                "Structure of X:",
-                                choices = c(Independent = "indep", `AR(1)` = "ar1", `AR(1)+` = "ar1+", Factor = "factor"),
-                                selected = "indep"),
-                    uiOutput("formula.action.x"),
-                    selectInput("data.action",
-                                "Data Model:",
-                                choices = c(Friedman = "sim_friedman", Checkerboard = "sim_checkerboard", Linear = "sim_linear", Max = "sim_max"),
-                                selected = "sim_friedman"),
-                    uiOutput("formula.action")
-             ),
-             column(9,
-                    fluidRow(
-                      column(6,
-                             card(
-                               card_header("5-fold CV Error", container = htmltools::h3),
-                               plotlyOutput("ly_errplot_action"))
-                      ),
-                      column(6,
-                             card(
-                               card_header("Running Time (seconds)", container = htmltools::h3),
-                               plotlyOutput("ly_timeplot_action")
-                             )
-                      )
-                    )
-             )
-           )
-  ),
-  tabPanel("Local Results",
-           p(
-             "Due to limited computational resource (e.g., maximum running time
-             is 6 hours and it does not support parallel computing with too many cores)
-             by GitHub actions, here we present more results which is run locally on HPC.
-             You can also reproduce the results on your own machines."
-           ),
-           fluidRow(
-             column(3,
-                    withMathJax(HTML("$$\\mathbf{X}\\in {\\mathrm{I\\!R}}^{n\\times p}, y\\in {\\mathrm{I\\!R}}^n$$")),
-                    selectInput("data.x",
-                                "Structure of X:",
-                                choices = c(Independent = "indep", `AR(1)` = "ar1", `AR(1)+` = "ar1+", Factor = "factor"),
-                                selected = "indep"),
-                    uiOutput("formula.x"),
-                    selectInput("data",
-                                "Data Model:",
-                                choices = c(Friedman = "sim_friedman", Checkerboard = "sim_checkerboard", Linear = "sim_linear", Max = "sim_max"),
-                                selected = "sim_friedman"),
-                    uiOutput("formula"),
-                    selectInput("x.axis",
-                                "x-axis:",
-                                choices = c(`Sample Size (n)` = "n", `Number of Features (p)` = "p"),
-                                selected = "n"),
-                    uiOutput("n_or_p")
-             ),
-             column(9,
-                    fluidRow(
-                      column(6,
-                             card(
-                               card_header("5-fold CV Error", container = htmltools::h3),
-                               plotlyOutput("ly_errplot"))
-                      ),
-                      column(6,
-                             card(
-                               card_header("Running Time (seconds)", container = htmltools::h3),
-                               plotlyOutput("ly_timeplot")
-                             )
-                      )
-                    )
-             )
-           )
-  ),
-  footer = tagList(
+  theme = bs_theme(version = 5),
+  collapsible = TRUE,
+  tags$footer(
     div(
       style = "text-align: center; padding: 10px; position: fixed; bottom: 0; width: 100%; background-color: #f8f9fa; border-top: 1px solid #e9ecef;",
       HTML('&copy; 2024 <a href="https://hohoweiya.xyz/">Lijun Wang</a>. All rights reserved.')
@@ -128,20 +135,35 @@ ui <- navbarPage(
 # Define server logic required to draw a histogram
 server <- function(input, output) {
   intro_md = "
+
   This application benchmarks different tree-based regression models on various (simulated) datasets. The surveyed methods include:
 
-  - **Bayesian Additive Regression Trees (BART)**: with R package [BART](https://cran.r-project.org/web/packages/BART/index.html)
-  - **XBART**: with R package [XBART](https://github.com/JingyuHe/XBART)
-  - **Random Forests**: with R package [ranger](https://cran.r-project.org/web/packages/ranger/index.html) and [randomForest](https://cran.r-project.org/web/packages/randomForest/index.html)
-  - **XGBoost**: with R package [xgboost](https://cran.r-project.org/web/packages/xgboost/index.html)
-  - **Multivariate Adaptive Regression Splines (MARS)**: with R package [earth](https://cran.r-project.org/web/packages/earth/index.html) and R package [earth.dof.patch](https://github.com/szcf-weiya/earth.dof.patch) with a modified degrees of freedom (df).
+  - **Bayesian Additive Regression Trees (BART)**:
+    - R package [BART](https://cran.r-project.org/web/packages/BART/index.html): the name in the legend is the format with `BART_{ntree}`
+      - `ntree`: number of trees. The default number of trees is 200 for continuous outcomes.
+  - **XBART**:
+    - R package [XBART](https://github.com/JingyuHe/XBART): the name in the legend is the format with `XBART_{num_trees}_{num_sweeps}`
+      - `num_trees`
+      - `num_sweeps`
+  - **Random Forests**:
+    - R package [ranger](https://cran.r-project.org/web/packages/ranger/index.html): the name in the legend is the format with `ranger_{num.trees}`
+      - `num.trees`: the number of trees.
+    - R package [randomForest](https://cran.r-project.org/web/packages/randomForest/index.html): the name in the legend is the format with `randomForest_{ntree}`
+      - `ntree`: the number of trees.
+  - **XGBoost**:
+    - R package [xgboost](https://cran.r-project.org/web/packages/xgboost/index.html)
+  - **Multivariate Adaptive Regression Splines (MARS)**:
+    - R package [earth](https://cran.r-project.org/web/packages/earth/index.html): the name in the legend is the format with `earth_{degree}`
+      - `degree`: linear model (`degree` = 1) or interaction model (`degree` = 2)
+    - R package [earth.dof.patch](https://github.com/szcf-weiya/earth.dof.patch) with a modified degrees of freedom (DoF): the name in the legend is the format with `earth_{degree}_df`
+      - by default, the `df` in `penalty` is  default to `degree + 1`. `earth.dof.patch` suggested setting an adaptive `penalty` to fulfill the consistency of DoF.
 
   The datasets with detailed generating model can be selected from the following drop-down menu.
 
   **Tips:** The figures are interactive, powered by Plotly. For example, you can hide or highlight methods by clicking on their names in the legend.
   "
   action_md = "
-  The results on this page is completely run on the publicly accessible [GitHub Action](https://github.com/szcf-weiya/benchmark.tree.regressions/actions) platform. So the benchmarking are absolutely latest, open, and reproducible.
+  The results on this page is run on the publicly accessible [GitHub Action](https://github.com/szcf-weiya/benchmark.tree.regressions/actions) platform. So the benchmarking are completely latest, open, and reproducible.
   "
   output$intro_md = renderUI({
     HTML(markdown::markdownToHTML(text = intro_md, fragment.only = TRUE))
@@ -247,11 +269,17 @@ server <- function(input, output) {
   # output$errplot <- renderPlot({
   #   ggplot(df1(), aes(x = n, y = cv.error, shape = method, color = as.factor(p))) + geom_point(size = 3) + geom_line() + plot_theme
   # })
+  available_symbols <- c("circle", "square", "diamond", "cross", "x", "triangle-up",
+                         "triangle-down", "triangle-left", "triangle-right",
+                         "star", "hexagram", "pentagon", "bowtie", "hourglass",
+                         "arrow-up", "arrow-down", "asterisk", "hash", "y-up",
+                         "y-down", "line-ew", "line-ns")
+
   output$ly_errplot = renderPlotly({
     if (input$x.axis == "n") {
-      plot_ly(data = df.n(), x = ~n, y = ~cv.error, type = "scatter", mode = "markers+lines", marker = list(size = 10), symbol = ~method)
+      plot_ly(data = df.n(), x = ~n, y = ~cv.error, type = "scatter", mode = "markers+lines", marker = list(size = 10), symbol = ~method, symbols = available_symbols)
     } else {
-      plot_ly(data = df.p(), x = ~p, y = ~cv.error, type = "scatter", mode = "markers+lines", marker = list(size = 10), symbol = ~method)
+      plot_ly(data = df.p(), x = ~p, y = ~cv.error, type = "scatter", mode = "markers+lines", marker = list(size = 10), symbol = ~method, symbols = available_symbols)
     }
   })
 
@@ -260,9 +288,9 @@ server <- function(input, output) {
   # })
   output$ly_timeplot = renderPlotly({
     if (input$x.axis == "n") {
-      plot_ly(data = df.n(), x = ~n, y = ~runtime, type = "scatter", mode = "markers+lines", marker = list(size = 10), symbol = ~method)
+      plot_ly(data = df.n(), x = ~n, y = ~runtime, type = "scatter", mode = "markers+lines", marker = list(size = 10), symbol = ~method, symbols = available_symbols)
     } else {
-      plot_ly(data = df.p(), x = ~p, y = ~runtime, type = "scatter", mode = "markers+lines", marker = list(size = 10), symbol = ~method)
+      plot_ly(data = df.p(), x = ~p, y = ~runtime, type = "scatter", mode = "markers+lines", marker = list(size = 10), symbol = ~method, symbols = available_symbols)
     }
   })
   # output$errplot.p <- renderPlot({

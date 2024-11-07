@@ -66,7 +66,7 @@ para.benchmark = function(arr_data, arr_methods, arr_paras, arr_structures = c("
     }
     return(df)
   }
-  indices = expand.grid(i = 1:ndata, n = ns, p = ps, s = arr_structures)
+  indices = expand.grid(i = 1:ndata, n = ns, p = ps, s = arr_structures, stringsAsFactors = FALSE)
   res = pbmcapply::pbmclapply(1:nrow(indices), function(idx) {
     i = indices[idx, "i"]
     n = indices[idx, "n"]
