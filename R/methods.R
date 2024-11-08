@@ -4,7 +4,7 @@ bart_fit = function(x, y, xtest, ntree = 200) {
   colMeans(ypred)
 }
 
-xbart_fit = function(x, y, xtest, num_trees = 10, num_sweeps = 10) {
+xbart_fit = function(x, y, xtest, num_trees = 100, num_sweeps = 40) {
   fit = XBART::XBART(as.matrix(y), x, num_trees = num_trees, num_sweeps = num_sweeps)
   ypred = predict(fit, xtest)
   rowMeans(ypred)
@@ -20,8 +20,8 @@ mars_fit = function(x, y, xtest, degree = 1, df.correct = FALSE) {
   ypred
 }
 
-xgboost_fit = function(x, y, xtest) {
-  fit = xgboost::xgboost(data = x, label = y, nrounds = 100)
+xgboost_fit = function(x, y, xtest, nrounds = 100, early_stopping_rounds = NULL) {
+  fit = xgboost::xgboost(data = x, label = y, nrounds = nrounds, early_stopping_rounds = early_stopping_rounds)
   ypred = predict(fit, xtest)
   ypred
 }

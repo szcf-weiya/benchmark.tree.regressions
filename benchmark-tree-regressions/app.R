@@ -15,7 +15,7 @@ library(plotly)
 tab_ga = tabPanel("GitHub Action",
                   uiOutput("action_md"),
                   fluidRow(
-                    column(3,
+                    column(12,
                            withMathJax(HTML("$$\\mathbf{X}\\in {\\mathrm{I\\!R}}^{n\\times p}, y\\in {\\mathrm{I\\!R}}^n$$")),
                            selectInput("data.action.x",
                                        "Structure of X:",
@@ -27,15 +27,16 @@ tab_ga = tabPanel("GitHub Action",
                                        choices = c(Friedman = "sim_friedman", Checkerboard = "sim_checkerboard", Linear = "sim_linear", Max = "sim_max"),
                                        selected = "sim_friedman"),
                            uiOutput("formula.action")
-                    ),
-                    column(9,
+                    )),
+                  fluidRow(
+                    column(12,
                            fluidRow(
-                             column(6,
+                             column(12,
                                     card(
                                       card_header("5-fold CV Error", container = htmltools::h3),
                                       plotlyOutput("ly_errplot_action"))
                              ),
-                             column(6,
+                             column(12,
                                     card(
                                       card_header("Running Time (seconds)", container = htmltools::h3),
                                       plotlyOutput("ly_timeplot_action")
@@ -53,7 +54,7 @@ tab_local =   tabPanel("Local Results",
              You can also reproduce the results on your own machines."
                        ),
                        fluidRow(
-                         column(3,
+                         column(12,
                                 withMathJax(HTML("$$\\mathbf{X}\\in {\\mathrm{I\\!R}}^{n\\times p}, y\\in {\\mathrm{I\\!R}}^n$$")),
                                 selectInput("data.x",
                                             "Structure of X:",
@@ -70,15 +71,16 @@ tab_local =   tabPanel("Local Results",
                                             choices = c(`Sample Size (n)` = "n", `Number of Features (p)` = "p"),
                                             selected = "n"),
                                 uiOutput("n_or_p")
-                         ),
-                         column(9,
+                         )),
+                       fluidRow(
+                         column(12,
                                 fluidRow(
-                                  column(6,
+                                  column(12,
                                          card(
                                            card_header("5-fold CV Error", container = htmltools::h3),
                                            plotlyOutput("ly_errplot"))
                                   ),
-                                  column(6,
+                                  column(12,
                                          card(
                                            card_header("Running Time (seconds)", container = htmltools::h3),
                                            plotlyOutput("ly_timeplot")
@@ -97,36 +99,41 @@ ui <- fluidPage(
     "))
   ),
   fluidRow(
-    wellPanel(
-      h2("Benchmarking Tree Regressions"),
-      withMathJax(),
-      tags$script(src = "https://cdn.plot.ly/plotly-2.11.1.min.js"),
-      tags$head(
-        tags$script(
-          HTML(
-            "
+    h1("Benchmarking Tree Regressions"),
+    column(4,
+           wellPanel(
+             #h2("Benchmarking Tree Regressions"),
+             withMathJax(),
+             tags$script(src = "https://cdn.plot.ly/plotly-2.11.1.min.js"),
+             tags$head(
+               tags$script(
+                 HTML(
+                   "
       MathJax.Hub.Config({
         tex2jax: { inlineMath: [['$', '$'], ['\\\\(', '\\\\)']] },
         'HTML-CSS': { scale: 90, linebreaks: { automatic: true } },
         SVG: { scale: 90, linebreaks: { automatic: true } }
       });
       "
-          )
-        )
-      ),
-      uiOutput("intro_md")
-    )),
-  fluidRow(
-    tabsetPanel(
-      tab_ga,
-      tab_local
-    )
-  ),
+                 )
+               )
+             ),
+             uiOutput("intro_md")
+           )),
+    column(8,
+           uiOutput("right_top_md"),
+           fluidRow(
+             tabsetPanel(
+               tab_ga,
+               tab_local
+             )
+           ),
+           )),
   theme = bs_theme(version = 5),
   collapsible = TRUE,
   tags$footer(
     div(
-      style = "text-align: center; padding: 10px; position: fixed; bottom: 0; width: 100%; background-color: #f8f9fa; border-top: 1px solid #e9ecef;",
+      style = "text-align: center; padding: 10px; bottom: 0; width: 100%; background-color: #f8f9fa; border-top: 1px solid #e9ecef;",
       HTML('&copy; 2024 <a href="https://hohoweiya.xyz/">Lijun Wang</a>. All rights reserved.')
     )
   )
@@ -138,26 +145,38 @@ server <- function(input, output) {
 
   This application benchmarks different tree-based regression models on various (simulated) datasets. The surveyed methods include:
 
-  - **Bayesian Additive Regression Trees (BART)**:
-    - R package [BART](https://cran.r-project.org/web/packages/BART/index.html): the name in the legend is the format with `BART_{ntree}`
-      - `ntree`: number of trees. The default number of trees is 200 for continuous outcomes.
-  - **XBART**:
-    - R package [XBART](https://github.com/JingyuHe/XBART): the name in the legend is the format with `XBART_{num_trees}_{num_sweeps}`
-      - `num_trees`
-      - `num_sweeps`
-  - **Random Forests**:
-    - R package [ranger](https://cran.r-project.org/web/packages/ranger/index.html): the name in the legend is the format with `ranger_{num.trees}`
-      - `num.trees`: the number of trees.
-    - R package [randomForest](https://cran.r-project.org/web/packages/randomForest/index.html): the name in the legend is the format with `randomForest_{ntree}`
-      - `ntree`: the number of trees.
-  - **XGBoost**:
-    - R package [xgboost](https://cran.r-project.org/web/packages/xgboost/index.html)
-  - **Multivariate Adaptive Regression Splines (MARS)**:
-    - R package [earth](https://cran.r-project.org/web/packages/earth/index.html): the name in the legend is the format with `earth_{degree}`
-      - `degree`: linear model (`degree` = 1) or interaction model (`degree` = 2)
-    - R package [earth.dof.patch](https://github.com/szcf-weiya/earth.dof.patch) with a modified degrees of freedom (DoF): the name in the legend is the format with `earth_{degree}_df`
-      - by default, the `df` in `penalty` is  default to `degree + 1`. `earth.dof.patch` suggested setting an adaptive `penalty` to fulfill the consistency of DoF.
+  The method name are formatted as `{Method}_{para1}_{para2}_..._{para3}`, where `paraX` are tuning parameters.
 
+  - **Bayesian Additive Regression Trees (BART)**:
+    - [![](https://img.shields.io/badge/R-BART-blue)](https://cran.r-project.org/web/packages/BART/index.html): `BART_{ntree}`
+      - `ntree`: number of trees in the forest. The default number of trees is 200 for continuous outcomes.
+      - `ndpost`: the number of posterior draws returned. The default in 1000.
+      - `nskip`: number of burnin iterations. The default is 100.
+  - **Accelerated BART (XBART)**:
+    - [![](https://img.shields.io/badge/R-XBART-blue)](https://github.com/JingyuHe/XBART): `XBART_{num_trees}_{num_sweeps}`
+      - `num_trees`: number of trees in the forest
+      - `num_sweeps`: (similar to `npost` in `BART`) one sweep is one iteration of the XBART algorithm, sampling all trees at once. The paper [He & Hahn (2023)](https://doi.org/10.1080/01621459.2021.1942012) recommends the number of sweeps `num_sweeps` to be 40.
+      - `burnin`: (similar to `nskip` in `BART`) number of burnin sweeps. The paper recommends it to be 15. Thus we fix it to be `15`.
+      - `mtry`: number of features at each split of the tree. The default is `p`.
+  - **Random Forests**:
+    - [![](https://img.shields.io/badge/R-randomForest-blue)](https://cran.r-project.org/web/packages/randomForest/index.html): `randomForest_{ntree}`
+      - `ntree`: number of trees.
+      - `mtry`: number of features at each split of the tree. The default is `p / 3` for continuous outcomes, and `sqrt(p)` for categorical outcomes, which is also consistent with the ESL book.
+    - [![](https://img.shields.io/badge/R-ranger-blue)](https://cran.r-project.org/web/packages/ranger/index.html): `ranger_{num.trees}`
+      - `num.trees`: number of trees.
+      - `mtry`: number of features at each split of the tree. The default is `sqrt(p)`. To be consistent with `randomForest`, we set it to be `p / 3`.
+  - **XGBoost**:
+    - [![](https://img.shields.io/badge/R-xgboost-blue)](https://cran.r-project.org/web/packages/xgboost/index.html): `XGBoost_{nrounds}_{early_stopping_rounds}`
+      - `nrounds`: max number of boosting iterations
+      - `early_stopping_rounds`: If `NULL`, the early stopping function is not triggered. If set to an integer `k`, training with a validation set will stop if the performance doesn't improve for `k` rounds.
+  - **Multivariate Adaptive Regression Splines (MARS)**:
+    - [![](https://img.shields.io/badge/R-earth-blue)](https://cran.r-project.org/web/packages/earth/index.html): `earth_{degree}`
+      - `degree`: linear model (`degree` = 1) or interaction model (`degree` = 2)
+    - [![](https://img.shields.io/badge/R-earth.dof.patch-blue)](https://github.com/szcf-weiya/earth.dof.patch): a patch for a modified degrees of freedom (DoF) on [![](https://img.shields.io/badge/R-earth-blue)](https://cran.r-project.org/web/packages/earth/index.html): `earth_{degree}_df`
+      - by default, the `df` in `penalty` of [![](https://img.shields.io/badge/R-earth-blue)](https://cran.r-project.org/web/packages/earth/index.html) is `degree + 1`. [Wang, Zhao, & Fan (2024)](https://doi.org/10.1080/10618600.2024.2388545) suggests setting an adaptive `penalty` to fulfill the consistency of DoF.
+
+  "
+  right_top_md = "
   The datasets with detailed generating model can be selected from the following drop-down menu.
 
   **Tips:** The figures are interactive, powered by Plotly. For example, you can hide or highlight methods by clicking on their names in the legend.
@@ -170,6 +189,9 @@ server <- function(input, output) {
   })
   output$action_md = renderUI({
     HTML(markdown::markdownToHTML(text = action_md, fragment.only = TRUE))
+  })
+  output$right_top_md = renderUI({
+    HTML(markdown::markdownToHTML(text = right_top_md, fragment.only = TRUE))
   })
   if (file.exists("res-debug.rds")) {
     df.action = readRDS("res-debug.rds")
