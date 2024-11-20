@@ -182,7 +182,7 @@ server <- function(input, output) {
   **Tips:** The figures are interactive, powered by Plotly. For example, you can hide or highlight methods by clicking on their names in the legend.
   "
   action_md = "
-  The results on this page is run on the publicly accessible [GitHub Action](https://github.com/szcf-weiya/benchmark.tree.regressions/actions) platform. So the benchmarking are completely latest, open, and reproducible.
+  The results on this page is run on the publicly accessible [GitHub Action](https://github.com/szcf-weiya/benchmark.tree.regressions/actions) platform, so the benchmarking are completely latest, open, and reproducible.
   "
   output$intro_md = renderUI({
     HTML(markdown::markdownToHTML(text = intro_md, fragment.only = TRUE))
