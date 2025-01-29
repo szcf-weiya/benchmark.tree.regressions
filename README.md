@@ -2,17 +2,47 @@
 
 The respiratory is partially inspired by [benchopt](https://github.com/benchopt/benchopt), but aimed for a more R-user-friendly, easily-hacking, more statistically benchmarking. 
 
-The current respiratory is mainly benchmarking various tree-based regressions, but the structure is much more flexible for other tasks. If you find this structure useful, please feel free to use it as **a template** for your benchmarking analysis.
-
-## Structure
+## :evergreen_tree: What is the Repo Structure?
 
 ### Source Files
 
 The source files are stored in [R/](R/), which contains three files
 
-- [datasets.R](R/datasets.R): each dataset (either simulated or real dataset) is defined as a function
-- [methods.R](R/methods.R): each method is defined as a function and with tuning parameters
-- [evaluate.R](R/evaluate.R): evaluate each method (with particular parameter) on each dataset, and report the CV error and running time (the criteria can be customized)
+#### [datasets.R](R/datasets.R): each dataset (either simulated or real dataset) is defined as a function
+
+For the simulation data, we consider
+
+- different covariance structure of the design matrix
+  - Independent
+  - AR(1)
+  - AR(1)+
+  - Factor
+- different data generating model
+  - Friedman
+  - Checkerboard
+  - Linear
+  - Max
+
+For the real datasets, we consider 
+
+| Data | Source | Description |
+|:----:|:------:|:-----------:|
+| TODO |||
+
+
+#### [methods.R](R/methods.R): each method is defined as a function and with tuning parameters
+
+Here are the method we considered:
+
+| Method | Software |
+|:------:|:--------:|
+| Bayesian Additive Regression Trees (BART) | [![](https://img.shields.io/badge/R-BART-blue)](https://cran.r-project.org/web/packages/BART/index.html) |
+| Accelerated BART (XBART) | [![](https://img.shields.io/badge/R-XBART-blue)](https://github.com/JingyuHe/XBART) | 
+| Random Forests | [![](https://img.shields.io/badge/R-randomForest-blue)](https://cran.r-project.org/web/packages/randomForest/index.html) |
+| XGBoost | [![](https://img.shields.io/badge/R-xgboost-blue)](https://cran.r-project.org/web/packages/xgboost/index.html) |
+| Multivariate Adaptive Regression Splines (MARS) |[![](https://img.shields.io/badge/R-earth-blue)](https://cran.r-project.org/web/packages/earth/index.html) |
+
+#### [evaluate.R](R/evaluate.R): evaluate each method (with particular parameter) on each dataset, and report the CV error and running time (the criteria can be customized)
 
 ### Shiny App
 
@@ -20,7 +50,7 @@ To interactively display the results, we adopt the Shiny App, and the related fi
 
 Note that a typical shiny app is server-based. With the help of `shinylive`, we deploy the shiny website on the GitHub pages.
 
-## :rocket: Run Locally
+## :rocket: How to Run Locally?
 
 The repository used `renv` to manage the compatible R packages. It is also better to use the same R version 4.1.2 in case.
 
@@ -46,3 +76,7 @@ $ R
       user     system    elapsed
 518757.236   6565.216  59712.296
 ```
+
+## :notebook: Use the Repo as a Template
+
+The current respiratory is mainly benchmarking various tree-based regressions, but the structure is much more flexible for other tasks. If you find this structure useful, please feel free to use it as **a template** for your benchmarking analysis via the link [:link:](https://github.com/new?template_name=benchmark.tree.regressions&template_owner=szcf-weiya).
