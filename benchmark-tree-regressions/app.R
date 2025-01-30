@@ -12,39 +12,94 @@ library(bslib)
 library(ggplot2)
 library(plotly)
 
+fluid_row1_github_action = fluidRow(
+  column(12,
+         withMathJax(HTML("$$\\mathbf{X}\\in {\\mathrm{I\\!R}}^{n\\times p}, y\\in {\\mathrm{I\\!R}}^n$$")),
+         selectInput("data.action.x",
+                     "Structure of X:",
+                     choices = c(Independent = "indep", `AR(1)` = "ar1", `AR(1)+` = "ar1+", Factor = "factor"),
+                     selected = "indep"),
+         uiOutput("formula.action.x"),
+         selectInput("data.action",
+                     "Data Model:",
+                     choices = c(Friedman = "sim_friedman", Checkerboard = "sim_checkerboard", Linear = "sim_linear", Max = "sim_max"),
+                     selected = "sim_friedman"),
+         uiOutput("formula.action")
+  ))
+
+fluid_row2_github_action = fluidRow(
+  column(12,
+         fluidRow(
+           column(12,
+                  card(
+                    card_header("5-fold CV Error", container = htmltools::h3),
+                    plotlyOutput("ly_errplot_action"))
+           ),
+           column(12,
+                  card(
+                    card_header("Running Time (seconds)", container = htmltools::h3),
+                    plotlyOutput("ly_timeplot_action")
+                  )
+           )
+         )
+  )
+)
+
+fluid_row1_local = fluidRow(
+  column(12,
+         withMathJax(HTML("$$\\mathbf{X}\\in {\\mathrm{I\\!R}}^{n\\times p}, y\\in {\\mathrm{I\\!R}}^n$$")),
+         selectInput("data.x",
+                     "Structure of X:",
+                     choices = c(Independent = "indep", `AR(1)` = "ar1", `AR(1)+` = "ar1+", Factor = "factor"),
+                     selected = "indep"),
+         uiOutput("formula.x"),
+         selectInput("data",
+                     "Data Model:",
+                     choices = c(Friedman = "sim_friedman", Checkerboard = "sim_checkerboard", Linear = "sim_linear", Max = "sim_max"),
+                     selected = "sim_friedman"),
+         uiOutput("formula"),
+         selectInput("x.axis",
+                     "x-axis:",
+                     choices = c(`Sample Size (n)` = "n", `Number of Features (p)` = "p"),
+                     selected = "n"),
+         uiOutput("n_or_p")
+  ))
+
+fluid_row2_local = fluidRow(
+  column(12,
+         fluidRow(
+           column(12,
+                  card(
+                    card_header("5-fold CV Error", container = htmltools::h3),
+                    plotlyOutput("ly_errplot"))
+           ),
+           column(12,
+                  card(
+                    card_header("Running Time (seconds)", container = htmltools::h3),
+                    plotlyOutput("ly_timeplot")
+                  )
+           )
+         )
+  )
+)
+link_github = tags$a(
+  shiny::icon("github"), "GitHub",
+  href = "https://github.com/szcf-weiya/benchmark.tree.regressions/",
+  target = "_blank"
+)
+footer = tags$footer(div(
+  style = "text-align: left; padding: 10px; position: fixed; bottom: 0; width: 100%; background-color: #f8f9fa; border-top: 1px solid #e9ecef;",
+  HTML(paste0('&copy; 2025 <a href="https://hohoweiya.xyz/">Lijun Wang</a>. Last updated: ', format(Sys.time(), "%Y-%m-%d %H:%M:%S %Z")))
+))
+header = tags$style(HTML("
+    body {
+      font-size: 22px; /* Default font size for body */
+    }
+  "))
 tab_ga = tabPanel("GitHub Action",
                   uiOutput("action_md"),
-                  fluidRow(
-                    column(12,
-                           withMathJax(HTML("$$\\mathbf{X}\\in {\\mathrm{I\\!R}}^{n\\times p}, y\\in {\\mathrm{I\\!R}}^n$$")),
-                           selectInput("data.action.x",
-                                       "Structure of X:",
-                                       choices = c(Independent = "indep", `AR(1)` = "ar1", `AR(1)+` = "ar1+", Factor = "factor"),
-                                       selected = "indep"),
-                           uiOutput("formula.action.x"),
-                           selectInput("data.action",
-                                       "Data Model:",
-                                       choices = c(Friedman = "sim_friedman", Checkerboard = "sim_checkerboard", Linear = "sim_linear", Max = "sim_max"),
-                                       selected = "sim_friedman"),
-                           uiOutput("formula.action")
-                    )),
-                  fluidRow(
-                    column(12,
-                           fluidRow(
-                             column(12,
-                                    card(
-                                      card_header("5-fold CV Error", container = htmltools::h3),
-                                      plotlyOutput("ly_errplot_action"))
-                             ),
-                             column(12,
-                                    card(
-                                      card_header("Running Time (seconds)", container = htmltools::h3),
-                                      plotlyOutput("ly_timeplot_action")
-                                    )
-                             )
-                           )
-                    )
-                  )
+                  fluid_row1_github_action,
+                  fluid_row2_github_action
 )
 tab_local =   tabPanel("Local Results",
                        p(
@@ -53,92 +108,64 @@ tab_local =   tabPanel("Local Results",
              by GitHub actions, here we present more results which is run locally on HPC.
              You can also reproduce the results on your own machines."
                        ),
-                       fluidRow(
-                         column(12,
-                                withMathJax(HTML("$$\\mathbf{X}\\in {\\mathrm{I\\!R}}^{n\\times p}, y\\in {\\mathrm{I\\!R}}^n$$")),
-                                selectInput("data.x",
-                                            "Structure of X:",
-                                            choices = c(Independent = "indep", `AR(1)` = "ar1", `AR(1)+` = "ar1+", Factor = "factor"),
-                                            selected = "indep"),
-                                uiOutput("formula.x"),
-                                selectInput("data",
-                                            "Data Model:",
-                                            choices = c(Friedman = "sim_friedman", Checkerboard = "sim_checkerboard", Linear = "sim_linear", Max = "sim_max"),
-                                            selected = "sim_friedman"),
-                                uiOutput("formula"),
-                                selectInput("x.axis",
-                                            "x-axis:",
-                                            choices = c(`Sample Size (n)` = "n", `Number of Features (p)` = "p"),
-                                            selected = "n"),
-                                uiOutput("n_or_p")
-                         )),
-                       fluidRow(
-                         column(12,
-                                fluidRow(
-                                  column(12,
-                                         card(
-                                           card_header("5-fold CV Error", container = htmltools::h3),
-                                           plotlyOutput("ly_errplot"))
-                                  ),
-                                  column(12,
-                                         card(
-                                           card_header("Running Time (seconds)", container = htmltools::h3),
-                                           plotlyOutput("ly_timeplot")
-                                         )
-                                  )
-                                )
-                         )
-                       )
+                       fluid_row1_local,
+                       fluid_row2_local
 )
-ui <- fluidPage(
-  tags$header(
-    tags$style(HTML("
-      body {
-        font-size: 18px; /* Default font size for body */
-      }
-    "))
-  ),
-  fluidRow(
-    h1("Benchmarking Tree Regressions"),
-    column(4,
-           wellPanel(
-             #h2("Benchmarking Tree Regressions"),
-             withMathJax(),
-             tags$script(src = "https://cdn.plot.ly/plotly-2.11.1.min.js"),
-             tags$head(
-               tags$script(
-                 HTML(
-                   "
+ui = page_navbar(
+  title = "Benchmarking Tree Regressions",
+  header = header,
+  sidebar = sidebar(
+    width = "40%",
+    wellPanel(
+      #h2("Benchmarking Tree Regressions"),
+      withMathJax(),
+      tags$script(src = "https://cdn.plot.ly/plotly-2.11.1.min.js"),
+      tags$head(
+        tags$script(
+          HTML(
+            "
       MathJax.Hub.Config({
         tex2jax: { inlineMath: [['$', '$'], ['\\\\(', '\\\\)']] },
         'HTML-CSS': { scale: 90, linebreaks: { automatic: true } },
         SVG: { scale: 90, linebreaks: { automatic: true } }
       });
       "
-                 )
-               )
-             ),
-             uiOutput("intro_md")
-           )),
-    column(8,
-           uiOutput("right_top_md"),
-           fluidRow(
-             tabsetPanel(
-               tab_ga,
-               tab_local
-             )
-           ),
-           )),
-  theme = bs_theme(version = 5),
-  collapsible = TRUE,
-  tags$footer(
-    div(
-      style = "text-align: center; padding: 10px; bottom: 0; width: 100%; background-color: #f8f9fa; border-top: 1px solid #e9ecef;",
-      HTML('&copy; 2024 <a href="https://hohoweiya.xyz/">Lijun Wang</a>. All rights reserved.')
+          )
+        )
+      ),
+      uiOutput("intro_md")
     )
-  )
-)
+  ),
 
+  nav_panel(title = "Introduction",
+            uiOutput("intro_panel_md"),
+            footer),
+  nav_panel(title = "GA Results",
+            uiOutput("right_top_md"),
+            uiOutput("action_md"),
+            fluid_row1_github_action,
+            fluid_row2_github_action,
+            footer
+  ),
+  nav_panel(title = "Local Results",
+            p(
+              "Due to limited computational resource (e.g., maximum running time
+           is 6 hours and it does not support parallel computing with too many cores)
+           by GitHub actions, here we present more results which is run locally on HPC.
+           You can also reproduce the results on your own machines."
+            ),
+            fluid_row1_local,
+            fluid_row2_local,
+            footer
+  ),
+  nav_spacer(),
+  nav_item(link_github)
+  # nav_menu(
+  #   title = "Links",
+  #   align = "right",
+  #   nav_item(link_github)
+  # ),
+)
 # Define server logic required to draw a histogram
 server <- function(input, output) {
   intro_md = "
@@ -181,6 +208,17 @@ server <- function(input, output) {
 
   **Tips:** The figures are interactive, powered by Plotly. For example, you can hide or highlight methods by clicking on their names in the legend.
   "
+  intro_panel_md = "
+  The project is partially inspired by [benchopt](https://github.com/benchopt/benchopt), but aimed for a more **R-user-friendly, easily-hacking, more statistically** benchmarking.
+
+  For the necessity and importance of benchmarking, I would like cite the following paragraph from [benchopt](https://github.com/benchopt/benchopt)'s paper:
+
+  > We firmly believe that this critical task of **maintaining an up-to-date benchmark in a field cannot be solved without a collective effort**. We want to empower the community to take up this challenge and **build a living, reproducible and standardized state of the art that can serve as a foundation for future research**.
+
+  - **GA Results:** For a latest, open, and reproducible benchmarking, we run the experiments on publicly accessible [GitHub Action (GA)](https://github.com/szcf-weiya/benchmark.tree.regressions/actions) platform.
+
+  - **Local Results:** On the other hand, due to limited computational resource (e.g., maximum running time is 6 hours) on GitHub Action, we also run the same code for more repetitions locally on HPC.
+  "
   action_md = "
   The results on this page is run on the publicly accessible [GitHub Action](https://github.com/szcf-weiya/benchmark.tree.regressions/actions) platform, so the benchmarking are completely latest, open, and reproducible.
   "
@@ -192,6 +230,9 @@ server <- function(input, output) {
   })
   output$right_top_md = renderUI({
     HTML(markdown::markdownToHTML(text = right_top_md, fragment.only = TRUE))
+  })
+  output$intro_panel_md = renderUI({
+    HTML(markdown::markdownToHTML(text = intro_panel_md, fragment.only = TRUE))
   })
   if (file.exists("res-debug.rds")) {
     df.action = readRDS("res-debug.rds")
