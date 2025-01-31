@@ -103,7 +103,7 @@ prepare_data = function(prefix = "./") {
   }
 }
 
-download.data = function(prefix = "../real_data/", dataname = "CASP") {
+download.data = function(prefix = "./real_data/", dataname = "CASP") {
   zipfile = paste0(prefix, dataname, ".zip")
   destfolder = paste0(prefix, dataname, "/")
   if (length(list.files(destfolder)) == 0) {
@@ -115,6 +115,7 @@ download.data = function(prefix = "../real_data/", dataname = "CASP") {
 }
 
 real_CASP = function(prefix = "./real_data/") {
+  if (!dir.exists(prefix)) dir.create(prefix)
   download.data(prefix = prefix, dataname = "CASP")
   destfile = paste0(prefix, "CASP/", "CASP.csv")
   df = read.csv(destfile)
