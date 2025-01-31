@@ -18,7 +18,7 @@ names_lst_methods = c("BART_100", #"BART_200", "BART_500",
 stopifnot(length(lst_methods) == length(names_lst_methods))
 names(lst_methods) = names_lst_methods
 lst_methods_paras = list(list(ntree = 100), #list(ntree = 200), list(ntree = 500),
-                         list(num_trees = 100, num_sweeps = 40, burnin = 15),
+                         list(num_trees = 100, num_sweeps = 40, burnin = 5),
                          #list(num_trees = 200, num_sweeps = 40, burnin = 15),
                          #list(num_trees = 500, num_sweeps = 40, burnin = 15),
                          #list(num_trees = 200, num_sweeps = 20, burnin = 15),
@@ -42,3 +42,12 @@ df = para.benchmark(c("sim_friedman", "sim_checkerboard", "sim_linear", "sim_max
                ncores = 10
 )
 saveRDS(df, "benchmark-tree-regressions/res-hpc.rds")
+
+df_real = para.benchmark(c("real_CASP", "real_Energy"),
+                    lst_methods, lst_methods_paras,
+                    arr_structures = c(""),
+                    ns = c(0),
+                    ps = c(0),
+                    ncores = 10
+)
+saveRDS(df_real, "benchmark-tree-regressions/res-hpc-real.rds")

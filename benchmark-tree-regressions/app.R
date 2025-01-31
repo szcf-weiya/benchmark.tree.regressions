@@ -45,6 +45,34 @@ fluid_row2_github_action = fluidRow(
   )
 )
 
+fluid_row1_github_action_real = fluidRow(
+  column(12,
+         withMathJax(HTML("$$\\mathbf{X}\\in {\\mathrm{I\\!R}}^{n\\times p}, y\\in {\\mathrm{I\\!R}}^n$$")),
+         selectInput("real.data.action",
+                     "Real Data",
+                     choices = c(CASP = "CASP", Energy = "Energy"),
+                     selected = "CASP")
+  ))
+
+fluid_row2_github_action_real = fluidRow(
+  column(12,
+         fluidRow(
+           column(12,
+                  card(
+                    card_header("5-fold CV Error", container = htmltools::h3),
+                    plotlyOutput("ly_errplot_action_real"))
+           ),
+           column(12,
+                  card(
+                    card_header("Running Time (seconds)", container = htmltools::h3),
+                    plotlyOutput("ly_timeplot_action_real")
+                  )
+           )
+         )
+  )
+)
+
+
 fluid_row1_local = fluidRow(
   column(12,
          withMathJax(HTML("$$\\mathbf{X}\\in {\\mathrm{I\\!R}}^{n\\times p}, y\\in {\\mathrm{I\\!R}}^n$$")),
@@ -82,6 +110,34 @@ fluid_row2_local = fluidRow(
          )
   )
 )
+
+fluid_row1_local_real = fluidRow(
+  column(12,
+         withMathJax(HTML("$$\\mathbf{X}\\in {\\mathrm{I\\!R}}^{n\\times p}, y\\in {\\mathrm{I\\!R}}^n$$")),
+         selectInput("real.data",
+                     "Real Data:",
+                     choices = c(CASP = "CASP", Energy = "Energy"),
+                     selected = "CASP")
+  ))
+
+fluid_row2_local_real = fluidRow(
+  column(12,
+         fluidRow(
+           column(12,
+                  card(
+                    card_header("5-fold CV Error", container = htmltools::h3),
+                    plotlyOutput("ly_errplot_real"))
+           ),
+           column(12,
+                  card(
+                    card_header("Running Time (seconds)", container = htmltools::h3),
+                    plotlyOutput("ly_timeplot_real")
+                  )
+           )
+         )
+  )
+)
+
 link_github = tags$a(
   shiny::icon("github"), "GitHub",
   href = "https://github.com/szcf-weiya/benchmark.tree.regressions/",
@@ -93,7 +149,7 @@ footer = tags$footer(div(
 ))
 header = tags$style(HTML("
     body {
-      font-size: 22px; /* Default font size for body */
+      font-size: 18px; /* Default font size for body */
     }
   "))
 tab_ga = tabPanel("GitHub Action",
@@ -114,6 +170,7 @@ tab_local =   tabPanel("Local Results",
 ui = page_navbar(
   title = "Benchmarking Tree Regressions",
   header = header,
+  theme = bs_theme(bootswatch = "cerulean"),
   sidebar = sidebar(
     width = "40%",
     wellPanel(
@@ -140,14 +197,14 @@ ui = page_navbar(
   nav_panel(title = "Introduction",
             uiOutput("intro_panel_md"),
             footer),
-  nav_panel(title = "GA Results",
+  nav_panel(title = "GA Simulations",
             uiOutput("right_top_md"),
             uiOutput("action_md"),
             fluid_row1_github_action,
             fluid_row2_github_action,
             footer
   ),
-  nav_panel(title = "Local Results",
+  nav_panel(title = "Local Simulations",
             p(
               "Due to limited computational resource (e.g., maximum running time
            is 6 hours and it does not support parallel computing with too many cores)
@@ -158,6 +215,14 @@ ui = page_navbar(
             fluid_row2_local,
             footer
   ),
+  nav_panel(title = "GA Real Data",
+            fluid_row1_github_action_real,
+            fluid_row2_github_action_real,
+            footer),
+  nav_panel(title = "Local Real Data",
+            fluid_row1_local_real,
+            fluid_row2_local_real,
+            footer),
   nav_spacer(),
   nav_item(link_github)
   # nav_menu(
@@ -238,6 +303,10 @@ server <- function(input, output) {
     df.action = readRDS("res-debug.rds")
     df.action$group = sapply(df.action$method, function(x) strsplit(x, "_")[[1]][1])
     df.local = readRDS("res-debug.rds")
+    df.action.real = readRDS("res-debug-real.rds")
+    df.action.real$group = sapply(df.action.real$method, function(x) strsplit(x, "_")[[1]][1])
+    df.local.real = readRDS("res-debug-real.rds") # dummy use
+    df.local.real$group = sapply(df.local.real$method, function(x) strsplit(x, "_")[[1]][1])
   } else {
     if (file.exists("res-action.rds"))
       df.action = readRDS("res-action.rds")
@@ -245,6 +314,13 @@ server <- function(input, output) {
       df.action = readRDS("res-hpc.rds")
     df.action$group = sapply(df.action$method, function(x) strsplit(x, "_")[[1]][1])
     df.local = readRDS("res-hpc.rds")
+    if (file.exists("res-action-real.rds"))
+      df.action.real = readRDS("res-action-real.rds")
+    else
+      df.action.real = readRDS("res-hpc-real.rds")
+    df.action.real$group = sapply(df.action.real$method, function(x) strsplit(x, "_")[[1]][1])
+    df.local.real = readRDS("res-hpc-real.rds") # the first time is just copied from res-debug-real.rds
+    df.local.real$group = sapply(df.local.real$method, function(x) strsplit(x, "_")[[1]][1])
   }
   df0 = eventReactive(c(input$data.action.x, input$data.action), {
     req(input$data.action)
@@ -257,6 +333,14 @@ server <- function(input, output) {
     req(input$data.x)
     df.tmp = subset(df.local, data.model == input$data)
     subset(df.tmp, structure == input$data.x)
+  })
+  df0.real = eventReactive(input$real.data.action, {
+    req(input$real.data.action)
+    subset(df.action.real, data.model == paste0("real_", input$real.data))
+  })
+  df1.real = eventReactive(input$real.data, {
+    req(input$real.data)
+    subset(df.local.real, data.model == paste0("real_", input$real.data))
   })
   fun_formula = function(x) {
     if (x == "sim_friedman") {
@@ -328,6 +412,20 @@ server <- function(input, output) {
   })
   output$ly_timeplot_action = renderPlotly({
     plot_ly(df0(), x = ~method, y=~runtime, type = "bar", color = ~group) %>% layout(barmode = "stack")
+  })
+
+  output$ly_errplot_action_real = renderPlotly({
+    plot_ly(df0.real(), x = ~method, y=~cv.error, type = "bar", color = ~group) %>% layout(barmode = "stack")
+  })
+  output$ly_timeplot_action_real = renderPlotly({
+    plot_ly(df0.real(), x = ~method, y=~runtime, type = "bar", color = ~group) %>% layout(barmode = "stack")
+  })
+
+  output$ly_errplot_real = renderPlotly({
+    plot_ly(df1.real(), x = ~method, y=~cv.error, type = "bar", color = ~group) %>% layout(barmode = "stack")
+  })
+  output$ly_timeplot_real = renderPlotly({
+    plot_ly(df1.real(), x = ~method, y=~runtime, type = "bar", color = ~group) %>% layout(barmode = "stack")
   })
   # output$errplot <- renderPlot({
   #   ggplot(df1(), aes(x = n, y = cv.error, shape = method, color = as.factor(p))) + geom_point(size = 3) + geom_line() + plot_theme

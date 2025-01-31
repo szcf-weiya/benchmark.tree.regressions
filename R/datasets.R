@@ -59,3 +59,73 @@ sim_max = function(n = 500, p = 200, sigma = 1, structure = "indep") {
   list(x = x, y = y)
 }
 
+# collection of real dataset
+lst_real_data = list(
+  CASP = c("Physicochemical Properties of Protein Tertiary Structure",
+           "https://archive.ics.uci.edu/dataset/265/physicochemical+properties+of+protein+tertiary+structure",
+           "https://archive.ics.uci.edu/static/public/265/physicochemical+properties+of+protein+tertiary+structure.zip"),
+  Energy = c("Appliances Energy Prediction",
+             "https://archive.ics.uci.edu/dataset/374/appliances+energy+prediction",
+             "https://archive.ics.uci.edu/static/public/374/appliances+energy+prediction.zip"),
+  AirQuality = c("Air Quality",
+                 "https://archive.ics.uci.edu/dataset/360/air+quality",
+                 "https://archive.ics.uci.edu/static/public/360/air+quality.zip"),
+  BiasCorrection = c("Bias correction of numerical prediction model temperature forecast",
+                     "https://archive.ics.uci.edu/dataset/514/bias+correction+of+numerical+prediction+model+temperature+forecast",
+                     "https://archive.ics.uci.edu/static/public/514/bias+correction+of+numerical+prediction+model+temperature+forecast.zip"),
+  ElectricalStability = c("Electrical Grid Stability Simulated Data",
+                          "https://archive.ics.uci.edu/dataset/471/electrical+grid+stability+simulated+data",
+                          "https://archive.ics.uci.edu/static/public/471/electrical+grid+stability+simulated+data.zip"),
+  GasTurbine = c("Gas Turbine CO and NOx Emission Data Set",
+                 "https://archive.ics.uci.edu/dataset/551/gas+turbine+co+and+nox+emission+data+set",
+                 "https://archive.ics.uci.edu/static/public/551/gas+turbine+co+and+nox+emission+data+set.zip"),
+  ResidentialBuilding = c("Residential Building",
+                          "https://archive.ics.uci.edu/dataset/437/residential+building+data+set",
+                          "https://archive.ics.uci.edu/static/public/437/residential+building+data+set.zip")
+)
+
+print_to_readme = function() {
+  n = length(lst_real_data)
+  data_names = names(lst_real_data)
+  for (i in 1:n) {
+    cat("|", data_names[i], "|", lst_real_data[[i]][1], "|", lst_real_data[[i]][2], "|\n")
+  }
+}
+
+prepare_data = function(prefix = "./") {
+  if (!dir.exists(prefix)) dir.create(prefix)
+  n = length(lst_real_data)
+  folders = names(lst_real_data)
+  for (i in 1:n) {
+    destfile = paste0(prefix, folders[i], ".zip")
+    if (!file.exists(destfile)) download.file(lst_real_data[[i]][3], destfile = destfile)
+    unzip(destfile, exdir = paste0(prefix, folders[i]))
+  }
+}
+
+download.data = function(prefix = "../real_data/", dataname = "CASP") {
+  zipfile = paste0(prefix, dataname, ".zip")
+  destfolder = paste0(prefix, dataname, "/")
+  if (length(list.files(destfolder)) == 0) {
+    if (!file.exists(zipfile)) {
+      download.file(lst_real_data[[dataname]], destfile = zipfile)
+    }
+    unzip(zipfile, exdir = destfolder)
+  }
+}
+
+real_CASP = function(prefix = "./real_data/") {
+  download.data(prefix = prefix, dataname = "CASP")
+  destfile = paste0(prefix, "CASP/", "CASP.csv")
+  df = read.csv(destfile)
+  list(x = as.matrix(df[, 2:ncol(df)]), y = df[, 1])
+}
+
+real_Energy = function(prefix = "./real_data/") {
+  download.data(prefix = prefix, dataname = "Energy")
+  destfile = paste0(prefix, "Energy/", "energydata_complete.csv")
+  df = read.csv(destfile)
+  # for simplicity, we exclude the date
+  # NOTE: in the original data repo (https://github.com/LuisM78/Appliances-energy-prediction-data), they proposed to derive new features from the week status
+  list(x = as.matrix(df[, 3:ncol(df)]), y = df[, 2])
+}

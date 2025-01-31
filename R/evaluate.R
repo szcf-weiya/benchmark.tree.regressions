@@ -28,16 +28,25 @@ benchmark = function(arr_data, arr_methods, arr_paras, arr_structures = c("indep
   if (is.null(names.method)) names.method = arr_methods
   df = matrix(0, ncol = 7, nrow = 0)
   for (i in 1:ndata) {
-    for (n in ns) {
-      for (p in ps) {
-        for (s in arr_structures) {
-          data = get(arr_data[i])(n = n, p = p, structure = s)
-          for (m in 1:nmethod) {
-            method = arr_methods[m]
-            tmp = evaluate(data$x, data$y, get(method), paras = arr_paras[[m]])
-            df = rbind(df, c(arr_data[i], s, n, p, names.method[m], unlist(tmp)))
+    if (grepl("^sim_", arr_data[i])) { # simulation data
+      for (n in ns) {
+        for (p in ps) {
+          for (s in arr_structures) {
+            data = get(arr_data[i])(n = n, p = p, structure = s)
+            for (m in 1:nmethod) {
+              method = arr_methods[m]
+              tmp = evaluate(data$x, data$y, get(method), paras = arr_paras[[m]])
+              df = rbind(df, c(arr_data[i], s, n, p, names.method[m], unlist(tmp)))
+            }
           }
         }
+      }
+    } else { # real data
+      data = get(arr_data[i])()
+      for (m in 1:nmethod) {
+        method = arr_methods[m]
+        tmp = evaluate(data$x, data$y, get(method), paras = arr_paras[[m]])
+        df = rbind(df, c(arr_data[i], "", nrow(data$x), ncol(data$x), names.method[m], unlist(tmp)))
       }
     }
   }
@@ -58,7 +67,13 @@ para.benchmark = function(arr_data, arr_methods, arr_paras, arr_structures = c("
   df = matrix(0, ncol = 7, nrow = 0)
   single_benchmark = function(i, n, p, s) {
     df = matrix(0, ncol = 7, nrow = nmethod)
-    data = get(arr_data[i])(n = n, p = p, structure = s)
+    if (grepl("^sim_", arr_data[i])) {
+      data = get(arr_data[i])(n = n, p = p, structure = s)
+    } else {
+      data = get(arr_data[i])()
+      n = nrow(data$x)
+      p = ncol(data$x)
+    }
     for (m in 1:nmethod) {
       method = arr_methods[m]
       tmp = evaluate(data$x, data$y, get(method), paras = arr_paras[[m]])
