@@ -4,8 +4,14 @@ bart_fit = function(x, y, xtest, ntree = 200) {
   colMeans(ypred)
 }
 
-xbart_fit = function(x, y, xtest, num_trees = 100, num_sweeps = 40, burnin = 15) {
-  fit = XBART::XBART(as.matrix(y), x, num_trees = num_trees, num_sweeps = num_sweeps, burnin = burnin)
+xbart_fit = function(x, y, xtest, num_trees = 100, num_sweeps = 40, burnin = 15, mtry = "p") {
+  if (mtry == "p")
+    n_mtry = ncol(x)
+  else if (mtry == "sqrtp")
+    n_mtry = floor(sqrt(ncol(x)))
+  else
+    n_mtry = floor(ncol(x)/3)
+  fit = XBART::XBART(as.matrix(y), x, num_trees = num_trees, num_sweeps = num_sweeps, burnin = burnin, mtry = n_mtry)
   ypred = predict(fit, xtest)
   rowMeans(ypred)
 }

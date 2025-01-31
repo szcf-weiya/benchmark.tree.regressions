@@ -231,6 +231,12 @@ ui = page_navbar(
   #   nav_item(link_github)
   # ),
 )
+add_target_blank = function(txt) {
+  html = xml2::read_html(txt)
+  links = xml2::xml_find_all(html, "//a")
+  xml2::xml_set_attr(links, "target", "_blank")
+  as.character(html)
+}
 # Define server logic required to draw a histogram
 server <- function(input, output) {
   intro_md = "
@@ -288,16 +294,16 @@ server <- function(input, output) {
   The results on this page is run on the publicly accessible [GitHub Action](https://github.com/szcf-weiya/benchmark.tree.regressions/actions) platform, so the benchmarking are completely latest, open, and reproducible.
   "
   output$intro_md = renderUI({
-    HTML(markdown::markdownToHTML(text = intro_md, fragment.only = TRUE))
+    HTML(add_target_blank(markdown::markdownToHTML(text = intro_md, fragment.only = TRUE)))
   })
   output$action_md = renderUI({
-    HTML(markdown::markdownToHTML(text = action_md, fragment.only = TRUE))
+    HTML(add_target_blank(markdown::markdownToHTML(text = action_md, fragment.only = TRUE)))
   })
   output$right_top_md = renderUI({
-    HTML(markdown::markdownToHTML(text = right_top_md, fragment.only = TRUE))
+    HTML(add_target_blank(markdown::markdownToHTML(text = right_top_md, fragment.only = TRUE)))
   })
   output$intro_panel_md = renderUI({
-    HTML(markdown::markdownToHTML(text = intro_panel_md, fragment.only = TRUE))
+    HTML(add_target_blank(markdown::markdownToHTML(text = intro_panel_md, fragment.only = TRUE)))
   })
   if (file.exists("res-debug.rds")) {
     df.action = readRDS("res-debug.rds")

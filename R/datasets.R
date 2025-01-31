@@ -88,7 +88,8 @@ print_to_readme = function() {
   n = length(lst_real_data)
   data_names = names(lst_real_data)
   for (i in 1:n) {
-    cat("|", data_names[i], "|", lst_real_data[[i]][1], "|", lst_real_data[[i]][2], "|\n")
+    #cat("|", data_names[i], "|", lst_real_data[[i]][1], "|", paste0("[![](https://img.shields.io/badge/UCI-", data_names[i], "-blue)](",  lst_real_data[[i]][2], ")"), "|\n")
+    cat("|", data_names[i], "|", lst_real_data[[i]][1], "|", paste0("[:link:](",  lst_real_data[[i]][2], ")"), "|\n")
   }
 }
 
