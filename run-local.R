@@ -18,7 +18,7 @@ names_lst_methods = c("BART_100", #"BART_200", "BART_500",
 stopifnot(length(lst_methods) == length(names_lst_methods))
 names(lst_methods) = names_lst_methods
 lst_methods_paras = list(list(ntree = 100), #list(ntree = 200), list(ntree = 500),
-                         list(num_trees = 100, num_sweeps = 40, burnin = 5),
+                         list(num_trees = 100, num_sweeps = 40, burnin = 15),
                          #list(num_trees = 200, num_sweeps = 40, burnin = 15),
                          #list(num_trees = 500, num_sweeps = 40, burnin = 15),
                          #list(num_trees = 200, num_sweeps = 20, burnin = 15),

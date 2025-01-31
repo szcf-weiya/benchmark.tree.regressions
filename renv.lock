@@ -473,19 +473,19 @@
     },
     "earth.dof.patch": {
       "Package": "earth.dof.patch",
-      "Version": "0.2.0",
+      "Version": "0.3.0",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteHost": "api.github.com",
       "RemoteUsername": "szcf-weiya",
       "RemoteRepo": "earth.dof.patch",
       "RemoteRef": "master",
-      "RemoteSha": "35c6da881da1e403c5fb714479122b5f1a5dfd1d",
+      "RemoteSha": "1e1c599b18a1d332ad3fab595ef72410d73d31b1",
+      "RemoteHost": "api.github.com",
       "Requirements": [
         "R",
         "earth"
       ],
-      "Hash": "b8c4c5412d42c29ac1def97623fa408d"
+      "Hash": "707b60548e9002aa990fa30b1a6e5e6c"
     },
     "ellipsis": {
       "Package": "ellipsis",

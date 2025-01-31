@@ -16,10 +16,10 @@ xbart_fit = function(x, y, xtest, num_trees = 100, num_sweeps = 40, burnin = 15,
   rowMeans(ypred)
 }
 
-mars_fit = function(x, y, xtest, degree = 1, df.correct = FALSE) {
+mars_fit = function(x, y, xtest, degree = 1, df.correct = FALSE, nrep = 10) {
   fit = earth::earth(x, y, degree = degree)
   if (df.correct) {
-    df.res = earth.dof.patch::correct_df(fit)
+    df.res = earth.dof.patch::correct_df(fit, N = nrep)
     fit = earth::earth(x, y, degree = degree, penalty = df.res$penalty)
   }
   ypred = predict(fit, xtest)

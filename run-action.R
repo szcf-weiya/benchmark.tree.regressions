@@ -13,4 +13,4 @@ df_real = benchmark(c("real_CASP", "real_Energy"),
                ns = c(0),
                ps = c(0)
 )
-saveRDS(df, "benchmark-tree-regressions/res-action-real.rds")
+saveRDS(df_real, "benchmark-tree-regressions/res-action-real.rds")
