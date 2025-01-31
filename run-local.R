@@ -34,20 +34,22 @@ lst_methods_paras = list(list(ntree = 100), #list(ntree = 200), list(ntree = 500
 stopifnot(length(lst_methods) == length(lst_methods_paras))
 
 
-df = para.benchmark(c("sim_friedman", "sim_checkerboard", "sim_linear", "sim_max"),
-               lst_methods, lst_methods_paras,
-               arr_structures = c("indep", "ar1", "ar1+", "factor"),
-               ns = c(100, 200, 500, 1000),
-               ps = c(200, 400, 600, 800),
-               ncores = 10
-)
-saveRDS(df, "benchmark-tree-regressions/res-hpc.rds")
+# df = para.benchmark(c("sim_friedman", "sim_checkerboard", "sim_linear", "sim_max"),
+#                lst_methods, lst_methods_paras,
+#                arr_structures = c("indep", "ar1", "ar1+", "factor"),
+#                ns = c(100, 200, 500, 1000),
+#                ps = c(200, 400, 600, 800),
+#                ncores = 10
+# )
+# saveRDS(df, "benchmark-tree-regressions/res-hpc.rds")
 
-df_real = para.benchmark(c("real_CASP", "real_Energy"),
+# some issue with para.benchmark for local (TODO)
+df_real = benchmark(c("real_CASP", "real_Energy"),
                     lst_methods, lst_methods_paras,
                     arr_structures = c(""),
                     ns = c(0),
-                    ps = c(0),
-                    ncores = 10
+                    ps = c(0)
+                    #ncores = 10
 )
+
 saveRDS(df_real, "benchmark-tree-regressions/res-hpc-real.rds")

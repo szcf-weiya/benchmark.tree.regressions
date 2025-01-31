@@ -108,7 +108,7 @@ download.data = function(prefix = "../real_data/", dataname = "CASP") {
   destfolder = paste0(prefix, dataname, "/")
   if (length(list.files(destfolder)) == 0) {
     if (!file.exists(zipfile)) {
-      download.file(lst_real_data[[dataname]], destfile = zipfile)
+      download.file(lst_real_data[[dataname]][3], destfile = zipfile)
     }
     unzip(zipfile, exdir = destfolder)
   }
