@@ -56,7 +56,7 @@ benchmark = function(arr_data, arr_methods, arr_paras, arr_structures = c("indep
   df$p = as.integer(df$p)
   df$cv.error = as.numeric(df$cv.error)
   df$runtime = as.numeric(df$runtime)
-  df$method = factor(df$method, levels = arr_methods)
+  df$method = factor(df$method, levels = names.method)
   return(df)
 }
 
@@ -97,7 +97,7 @@ para.benchmark = function(arr_data, arr_methods, arr_paras, arr_structures = c("
   df$p = as.integer(df$p)
   df$cv.error = as.numeric(df$cv.error)
   df$runtime = as.numeric(df$runtime)
-  df$method = factor(df$method, levels = arr_methods)
+  df$method = factor(df$method, levels = names.method)
   return(df)
 }
 
