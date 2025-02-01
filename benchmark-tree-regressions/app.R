@@ -50,7 +50,13 @@ fluid_row1_github_action_real = fluidRow(
          withMathJax(HTML("$$\\mathbf{X}\\in {\\mathrm{I\\!R}}^{n\\times p}, y\\in {\\mathrm{I\\!R}}^n$$")),
          selectInput("real.data.action",
                      "Real Data",
-                     choices = c(CASP = "CASP", Energy = "Energy"),
+                     choices = c(CASP = "CASP",
+                                 Energy = "Energy",
+                                 AirQuality = "AirQuality",
+                                 BiasCorrection = "BiasCorrection",
+                                 ElectricalStability = "ElectricalStability",
+                                 GasTurbine = "GasTurbine",
+                                 ResidentialBuilding = "ResidentialBuilding"),
                      selected = "CASP")
   ))
 
@@ -116,7 +122,12 @@ fluid_row1_local_real = fluidRow(
          withMathJax(HTML("$$\\mathbf{X}\\in {\\mathrm{I\\!R}}^{n\\times p}, y\\in {\\mathrm{I\\!R}}^n$$")),
          selectInput("real.data",
                      "Real Data:",
-                     choices = c(CASP = "CASP", Energy = "Energy"),
+                     choices = c(CASP = "CASP", Energy = "Energy",
+                                 AirQuality = "AirQuality",
+                                 BiasCorrection = "BiasCorrection",
+                                 ElectricalStability = "ElectricalStability",
+                                 GasTurbine = "GasTurbine",
+                                 ResidentialBuilding = "ResidentialBuilding"),
                      selected = "CASP")
   ))
 
@@ -342,7 +353,7 @@ server <- function(input, output) {
   })
   df0.real = eventReactive(input$real.data.action, {
     req(input$real.data.action)
-    subset(df.action.real, data.model == paste0("real_", input$real.data))
+    subset(df.action.real, data.model == paste0("real_", input$real.data.action))
   })
   df1.real = eventReactive(input$real.data, {
     req(input$real.data)

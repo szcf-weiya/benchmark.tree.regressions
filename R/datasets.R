@@ -1,3 +1,4 @@
+library(readxl)
 gen_x = function(n = 500, p = 200, structure = "indep",
                  rho = 0.9, # used for ar1
                  rho1 = 0.5, rho2 = 0.2 # used for ar1+
@@ -115,6 +116,7 @@ download.data = function(prefix = "./real_data/", dataname = "CASP") {
   }
 }
 
+# https://archive.ics.uci.edu/dataset/265/physicochemical+properties+of+protein+tertiary+structure
 real_CASP = function(prefix = "./real_data/") {
   if (!dir.exists(prefix)) dir.create(prefix)
   download.data(prefix = prefix, dataname = "CASP")
@@ -123,6 +125,7 @@ real_CASP = function(prefix = "./real_data/") {
   list(x = as.matrix(df[, 2:ncol(df)]), y = df[, 1])
 }
 
+# https://archive.ics.uci.edu/dataset/374/appliances+energy+prediction
 real_Energy = function(prefix = "./real_data/") {
   download.data(prefix = prefix, dataname = "Energy")
   destfile = paste0(prefix, "Energy/", "energydata_complete.csv")
@@ -130,4 +133,57 @@ real_Energy = function(prefix = "./real_data/") {
   # for simplicity, we exclude the date
   # NOTE: in the original data repo (https://github.com/LuisM78/Appliances-energy-prediction-data), they proposed to derive new features from the week status
   list(x = as.matrix(df[, 3:ncol(df)]), y = df[, 2])
+}
+
+# https://archive.ics.uci.edu/dataset/360/air+quality
+real_AirQuality = function(prefix = "./real_data/") {
+  download.data(prefix = prefix, dataname = "AirQuality")
+  destfile = paste0(prefix, "AirQuality/", "AirQualityUCI.xlsx")
+  df = as.data.frame(read_xlsx(destfile))
+  # question: which one is the response?
+  list(x = as.matrix(df[, 4:ncol(df)]), y = df[, 3])
+}
+
+# https://archive.ics.uci.edu/dataset/514/bias+correction+of+numerical+prediction+model+temperature+forecast
+real_BiasCorrection = function(prefix = "./real_data/") {
+  download.data(prefix = prefix, dataname = "BiasCorrection")
+  destfile = paste0(prefix, "BiasCorrection/", "Bias_correction_ucl.csv")
+  df = read.csv(destfile)
+  # rm NA values
+  df = df[complete.cases(df[, 2:ncol(df)]),] # exclude the first column
+  # take the Next_Tmax as output, (or Next_Tmin)
+  list(x = as.matrix(df[, 3:(ncol(df) - 2)]),
+       y = df[, ncol(df) - 1])
+}
+
+# https://archive.ics.uci.edu/dataset/471/electrical+grid+stability+simulated+data
+real_ElectricalStability = function(prefix = "./real_data/") {
+  download.data(prefix = prefix, dataname = "ElectricalStability")
+  destfile = paste0(prefix, "ElectricalStability/", "Data_for_UCI_named.csv")
+  df = read.csv(destfile)
+  list(x = as.matrix(df[, 1:(ncol(df) - 2)]),
+       y = df[, ncol(df) - 1])
+}
+
+# https://archive.ics.uci.edu/dataset/551/gas+turbine+co+and+nox+emission+data+set
+real_GasTurbine = function(prefix = "./real_data/") {
+  download.data(prefix = prefix, dataname = "GasTurbine")
+  destfile = paste0(prefix, "GasTurbine/", "gt_2011.csv")
+  df = read.csv(destfile)
+  for (i in 2012:2015) {
+    destfile = paste0(prefix, "GasTurbine/", "gt_", i, ".csv")
+    tmp = read.csv(destfile)
+    df = rbind(df, tmp)
+  }
+  list(x = as.matrix(df[, -8]),
+       y = df[, 8]) # TEY as output
+}
+
+# https://archive.ics.uci.edu/dataset/437/residential+building+data+set
+real_ResidentialBuilding = function(prefix = "./real_data/") {
+  download.data(prefix = prefix, dataname = "ResidentialBuilding")
+  destfile = paste0(prefix, "ResidentialBuilding/", "Residential-Building-Data-Set.xlsx")
+  df = as.data.frame(suppressMessages(read_xlsx(destfile, skip = 1)));
+  list(x = as.matrix(df[, 1:(ncol(df) - 2)]),
+       y = df[, ncol(df) - 1])
 }

@@ -53,7 +53,7 @@ Here are the method we considered:
 
 To interactively display the results, we adopt the Shiny App, and the related files are in the folder [benchmark-tree-regressions/](benchmark-tree-regressions/)
 
-Note that a typical shiny app is server-based. With the help of `shinylive`, we deploy the shiny website on the GitHub pages.
+Note that a typical shiny app is server-based. With the help of `shinylive`, we deploy the shiny website on the GitHub pages <https://hohoweiya.xyz/benchmark.tree.regressions/>.
 
 ## :rocket: How to Run Locally?
 
