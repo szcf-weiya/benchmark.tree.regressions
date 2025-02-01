@@ -53,9 +53,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: results
-        path: |
-          benchmark-tree-regressions/res-action.rds  # This should point to where the results are saved
-          benchmark-tree-regressions/res-action-real.rds
+        path: benchmark-tree-regressions/*.rds
 
     - name: Build site
       shell: Rscript {0}

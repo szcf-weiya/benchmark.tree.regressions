@@ -318,26 +318,26 @@ server <- function(input, output) {
   })
   if (file.exists("res-debug.rds")) {
     df.action = readRDS("res-debug.rds")
-    df.action$group = sapply(df.action$method, function(x) strsplit(x, "_")[[1]][1])
+    df.action$group = sapply(as.character(df.action$method), function(x) strsplit(x, "_")[[1]][1])
     df.local = readRDS("res-debug.rds")
     df.action.real = readRDS("res-debug-real.rds")
-    df.action.real$group = sapply(df.action.real$method, function(x) strsplit(x, "_")[[1]][1])
+    df.action.real$group = sapply(as.character(df.action.real$method), function(x) strsplit(x, "_")[[1]][1])
     df.local.real = readRDS("res-debug-real.rds") # dummy use
-    df.local.real$group = sapply(df.local.real$method, function(x) strsplit(x, "_")[[1]][1])
+    df.local.real$group = sapply(as.character(df.local.real$method), function(x) strsplit(x, "_")[[1]][1])
   } else {
     if (file.exists("res-action.rds"))
       df.action = readRDS("res-action.rds")
     else
       df.action = readRDS("res-hpc.rds")
-    df.action$group = sapply(df.action$method, function(x) strsplit(x, "_")[[1]][1])
+    df.action$group = sapply(as.character(df.action$method), function(x) strsplit(x, "_")[[1]][1])
     df.local = readRDS("res-hpc.rds")
     if (file.exists("res-action-real.rds"))
       df.action.real = readRDS("res-action-real.rds")
     else
       df.action.real = readRDS("res-hpc-real.rds")
-    df.action.real$group = sapply(df.action.real$method, function(x) strsplit(x, "_")[[1]][1])
+    df.action.real$group = sapply(as.character(df.action.real$method), function(x) strsplit(x, "_")[[1]][1])
     df.local.real = readRDS("res-hpc-real.rds") # the first time is just copied from res-debug-real.rds
-    df.local.real$group = sapply(df.local.real$method, function(x) strsplit(x, "_")[[1]][1])
+    df.local.real$group = sapply(as.character(df.local.real$method), function(x) strsplit(x, "_")[[1]][1])
   }
   df0 = eventReactive(c(input$data.action.x, input$data.action), {
     req(input$data.action)
