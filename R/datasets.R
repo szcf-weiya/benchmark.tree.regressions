@@ -82,18 +82,36 @@ lst_real_data = list(
                  "https://archive.ics.uci.edu/static/public/551/gas+turbine+co+and+nox+emission+data+set.zip"),
   ResidentialBuilding = c("Residential Building",
                           "https://archive.ics.uci.edu/dataset/437/residential+building+data+set",
-                          "https://archive.ics.uci.edu/static/public/437/residential+building+data+set.zip")
+                          "https://archive.ics.uci.edu/static/public/437/residential+building+data+set.zip"),
+  LungCancerGenomic = c("Lung cancer genomic data from the Chemores Cohort Study",
+                        "https://github.com/jedazard/PRIMsrc/blob/master/data/Real.2.rda",
+                        "https://github.com/jedazard/PRIMsrc/raw/refs/heads/master/data/Real.2.rda")
 )
 
 print_to_readme = function() {
   n = length(lst_real_data)
   data_names = names(lst_real_data)
+  dims = sapply(names(lst_real_data), function(x) dim(get(paste0("real_", x))()$x))
   for (i in 1:n) {
     #cat("|", data_names[i], "|", lst_real_data[[i]][1], "|", paste0("[![](https://img.shields.io/badge/UCI-", data_names[i], "-blue)](",  lst_real_data[[i]][2], ")"), "|\n")
-    cat("|", data_names[i], "|", lst_real_data[[i]][1], "|", paste0("[:link:](",  lst_real_data[[i]][2], ")"), "|\n")
+    cat("|", data_names[i], "|", lst_real_data[[i]][1], "|", dims[1, i], "|", dims[2, i], "|", paste0("[:link:](",  lst_real_data[[i]][2], ")"), "|\n")
   }
 }
 
+df_data_meta = function() {
+  n = length(lst_real_data)
+  data_names = names(lst_real_data)
+  dims = sapply(names(lst_real_data), function(x) dim(get(paste0("real_", x))()$x))
+  data.frame(
+    Data = data_names,
+    Description = sapply(1:n, function(i) lst_real_data[[i]][1]),
+    n = dims[1, ],
+    p = dims[2, ],
+    URL = sapply(1:n, function(i) paste0("<a target='_blank' href='", lst_real_data[[i]][2], "'>&#128279;</a>"))
+  )
+}
+# real.data.meta = df_data_meta()
+# saveRDS(real.data.meta, file = "benchmark-tree-regressions/real-data-meta.rds")
 prepare_data = function(prefix = "./") {
   if (!dir.exists(prefix)) dir.create(prefix)
   n = length(lst_real_data)
@@ -186,4 +204,19 @@ real_ResidentialBuilding = function(prefix = "./real_data/") {
   df = as.data.frame(suppressMessages(read_xlsx(destfile, skip = 1)));
   list(x = as.matrix(df[, 1:(ncol(df) - 2)]),
        y = df[, ncol(df) - 1])
+}
+
+# https://rdrr.io/cran/PRIMsrc/man/Real.2-data.html
+# https://github.com/jedazard/PRIMsrc/blob/master/data/Real.2.rda
+real_LungCancerGenomic = function(prefix = "./real_data/") {
+  destfolder = paste0(prefix, "LungCancerGenomic/")
+  destfile = paste0(destfolder, "Real.2.rda")
+  if (!file.exists(destfile)) {
+    if (!dir.exists(destfolder))
+      dir.create(destfolder)
+    download.file("https://github.com/jedazard/PRIMsrc/raw/refs/heads/master/data/Real.2.rda", destfile = destfile)
+  }
+  load(destfile)
+  list(x = as.matrix(Real.2[, -1]),
+       y = Real.2[, 1])
 }

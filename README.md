@@ -25,15 +25,16 @@ For the simulation data, we consider
 
 For the real datasets, we consider 
 
-| Data | Description | URL  | 
-|:----:|:------:|:-----------:|
-| CASP | Physicochemical Properties of Protein Tertiary Structure | [:link:](https://archive.ics.uci.edu/dataset/265/physicochemical+properties+of+protein+tertiary+structure) |
-| Energy | Appliances Energy Prediction | [:link:](https://archive.ics.uci.edu/dataset/374/appliances+energy+prediction) |
-| AirQuality | Air Quality | [:link:](https://archive.ics.uci.edu/dataset/360/air+quality) |
-| BiasCorrection | Bias correction of numerical prediction model temperature forecast | [:link:](https://archive.ics.uci.edu/dataset/514/bias+correction+of+numerical+prediction+model+temperature+forecast) |
-| ElectricalStability | Electrical Grid Stability Simulated Data | [:link:](https://archive.ics.uci.edu/dataset/471/electrical+grid+stability+simulated+data) |
-| GasTurbine | Gas Turbine CO and NOx Emission Data Set | [:link:](https://archive.ics.uci.edu/dataset/551/gas+turbine+co+and+nox+emission+data+set) |
-| ResidentialBuilding | Residential Building | [:link:](https://archive.ics.uci.edu/dataset/437/residential+building+data+set) |
+| Data | Description | n | p | URL  | 
+|:----:|:------:|:--:|:--:|:-----------:|
+| CASP | Physicochemical Properties of Protein Tertiary Structure | 45730 | 9 | [:link:](https://archive.ics.uci.edu/dataset/265/physicochemical+properties+of+protein+tertiary+structure) |
+| Energy | Appliances Energy Prediction | 19735 | 27 | [:link:](https://archive.ics.uci.edu/dataset/374/appliances+energy+prediction) |
+| AirQuality | Air Quality | 9357 | 12 | [:link:](https://archive.ics.uci.edu/dataset/360/air+quality) |
+| BiasCorrection | Bias correction of numerical prediction model temperature forecast | 7590 | 21 | [:link:](https://archive.ics.uci.edu/dataset/514/bias+correction+of+numerical+prediction+model+temperature+forecast) |
+| ElectricalStability | Electrical Grid Stability Simulated Data | 10000 | 12 | [:link:](https://archive.ics.uci.edu/dataset/471/electrical+grid+stability+simulated+data) |
+| GasTurbine | Gas Turbine CO and NOx Emission Data Set | 36733 | 10 | [:link:](https://archive.ics.uci.edu/dataset/551/gas+turbine+co+and+nox+emission+data+set) |
+| ResidentialBuilding | Residential Building | 372 | 107 | [:link:](https://archive.ics.uci.edu/dataset/437/residential+building+data+set) |
+| LungCancerGenomic | Lung cancer genomic data from the Chemores Cohort Study | 123 | 945 | [:link:](https://github.com/jedazard/PRIMsrc/blob/master/data/Real.2.rda) |
 
 #### [methods.R](R/methods.R): each method is defined as a function and with tuning parameters
 

@@ -47,7 +47,7 @@ stopifnot(length(lst_methods) == length(lst_methods_paras))
 df_real = benchmark(c("real_CASP", "real_Energy",
                       "real_AirQuality", "real_BiasCorrection",
                       "real_ElectricalStability", "real_GasTurbine",
-                      "real_ResidentialBuilding"),
+                      "real_ResidentialBuilding", "real_LungCancerGenomic"),
                     lst_methods, lst_methods_paras,
                     arr_structures = c(""),
                     ns = c(0),

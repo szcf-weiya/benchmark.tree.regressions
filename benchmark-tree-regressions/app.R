@@ -9,7 +9,7 @@
 
 library(shiny)
 library(bslib)
-library(ggplot2)
+#library(ggplot2) # (try to reduce loading time?)
 library(plotly)
 
 fluid_row1_github_action = fluidRow(
@@ -56,7 +56,8 @@ fluid_row1_github_action_real = fluidRow(
                                  BiasCorrection = "BiasCorrection",
                                  ElectricalStability = "ElectricalStability",
                                  GasTurbine = "GasTurbine",
-                                 ResidentialBuilding = "ResidentialBuilding"),
+                                 ResidentialBuilding = "ResidentialBuilding",
+                                 LungCancerGenomic = "LungCancerGenomic"),
                      selected = "CASP")
   ))
 
@@ -127,7 +128,8 @@ fluid_row1_local_real = fluidRow(
                                  BiasCorrection = "BiasCorrection",
                                  ElectricalStability = "ElectricalStability",
                                  GasTurbine = "GasTurbine",
-                                 ResidentialBuilding = "ResidentialBuilding"),
+                                 ResidentialBuilding = "ResidentialBuilding",
+                                 LungCancerGenomic = "LungCancerGenomic"),
                      selected = "CASP")
   ))
 
@@ -227,10 +229,18 @@ ui = page_navbar(
             footer
   ),
   nav_panel(title = "GA Real Data",
+            p("
+              Here are real datsets we conducted benchmarking experiments.
+              "),
+            tableOutput("real_data_meta"),
             fluid_row1_github_action_real,
             fluid_row2_github_action_real,
             footer),
   nav_panel(title = "Local Real Data",
+            p("
+              Here are real datsets we conducted benchmarking experiments.
+              "),
+            tableOutput("real_data_meta2"),
             fluid_row1_local_real,
             fluid_row2_local_real,
             footer),
@@ -304,6 +314,10 @@ server <- function(input, output) {
   action_md = "
   The results on this page is run on the publicly accessible [GitHub Action](https://github.com/szcf-weiya/benchmark.tree.regressions/actions) platform, so the benchmarking are completely latest, open, and reproducible.
   "
+  real_data_md = "
+  Here are real datsets we conducted benchmarking experiments.
+
+  "
   output$intro_md = renderUI({
     HTML(add_target_blank(markdown::markdownToHTML(text = intro_md, fragment.only = TRUE)))
   })
@@ -316,6 +330,19 @@ server <- function(input, output) {
   output$intro_panel_md = renderUI({
     HTML(add_target_blank(markdown::markdownToHTML(text = intro_panel_md, fragment.only = TRUE)))
   })
+  # output$real_data_md = renderUI(
+  #   HTML(add_target_blank(markdown::markdownToHTML(text = real_data_md, fragment.only = TRUE)))
+  # )
+  # output$real_data_md2 = renderUI(
+  #   HTML(add_target_blank(markdown::markdownToHTML(text = real_data_md, fragment.only = TRUE)))
+  # )
+  real.data.meta = readRDS("real-data-meta.rds")
+  output$real_data_meta = renderTable({
+    real.data.meta
+  }, sanitize.text.function = identity)
+  output$real_data_meta2 = renderTable({
+    real.data.meta
+  }, sanitize.text.function = identity)
   if (file.exists("res-debug.rds")) {
     df.action = readRDS("res-debug.rds")
     df.action$group = sapply(as.character(df.action$method), function(x) strsplit(x, "_")[[1]][1])
