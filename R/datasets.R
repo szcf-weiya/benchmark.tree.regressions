@@ -39,7 +39,8 @@ sim_friedman = function(n = 500, p = 200, sigma = 1, structure = "indep") {
 ## used in Linero (2018)
 sim_checkerboard = function(n = 500, p = 200, sigma = 1, structure = "indep") {
   x = gen_x(n, p, structure = structure)
-  y0 = 2 * x[, 50] * x[, 100] + 2 * x[, 150] * x[, 200]
+  # originally, Linero used 50, 100, 150, 200
+  y0 = 2 * x[, 1] * x[, 2] + 2 * x[, 3] * x[, 4]
   y = y0 + rnorm(n) * sigma
   list(x = x, y = y)
 }
@@ -47,7 +48,8 @@ sim_checkerboard = function(n = 500, p = 200, sigma = 1, structure = "indep") {
 ## used in Linero (2018)
 sim_linear = function(n = 500, p = 200, sigma = 1, structure = "indep") {
   x = gen_x(n, p, structure = structure)
-  y0 = 2 * x[, 50] + 2 * x[, 100] + 4 * x[, 150]
+  # originally, Linero used 50, 100, 150
+  y0 = 2 * x[, 1] + 2 * x[, 2] + 4 * x[, 3]
   y = y0 + rnorm(n) *sigma
   list(x = x, y = y)
 }
@@ -56,6 +58,16 @@ sim_linear = function(n = 500, p = 200, sigma = 1, structure = "indep") {
 sim_max = function(n = 500, p = 200, sigma = 1, structure = "indep") {
   x = gen_x(n, p, structure = structure)
   y0 = apply(x, 1, function(x) max(x[1:3]))
+  y = y0 + rnorm(n) * sigma
+  list(x = x, y = y)
+}
+
+# used in He and Hahn (2023)
+sim_singleIndex = function(n = 500, p = 200, sigma = 1, structure = "indep") {
+  x = gen_x(n, p, structure = structure)
+  gamma = -1.5 + ( c(1:10) - 1 ) / 3
+  a = rowSums(sapply(1:10, function(i) (x[, i] - gamma[i])^2 ))
+  y0 = 10 * sqrt(a) + sin(5 * a)
   y = y0 + rnorm(n) * sigma
   list(x = x, y = y)
 }

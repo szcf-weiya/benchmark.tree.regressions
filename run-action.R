@@ -1,9 +1,9 @@
 source("run-preload.R")
-df = benchmark(c("sim_friedman", "sim_checkerboard", "sim_linear", "sim_max"),
+df = benchmark(c("sim_friedman", "sim_checkerboard", "sim_linear", "sim_max", "sim_singleIndex"),
                lst_methods, lst_methods_paras,
                arr_structures = c("indep", "ar1", "ar1+", "factor"),
-               ns = c(500),
-               ps = c(200)
+               ns = c(100),
+               ps = c(20)
 )
 saveRDS(df, "benchmark-tree-regressions/res-action.rds")
 

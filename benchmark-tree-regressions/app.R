@@ -12,17 +12,33 @@ library(bslib)
 #library(ggplot2) # (try to reduce loading time?)
 library(plotly)
 
+choices.data.model = c(Friedman = "sim_friedman",
+                       Checkerboard = "sim_checkerboard",
+                       Linear = "sim_linear",
+                       Max = "sim_max",
+                       SingleIndex = "sim_singleIndex")
+choices.x.structure = c(Independent = "indep", `AR(1)` = "ar1", `AR(1)+` = "ar1+", Factor = "factor")
+choices.real.data = c(CASP = "CASP",
+                      Energy = "Energy",
+                      AirQuality = "AirQuality",
+                      BiasCorrection = "BiasCorrection",
+                      ElectricalStability = "ElectricalStability",
+                      GasTurbine = "GasTurbine",
+                      ResidentialBuilding = "ResidentialBuilding",
+                      LungCancerGenomic = "LungCancerGenomic")
+setup_html = HTML("<p>All data-generating processes are homoscedastic additive error models: $$Y = f(X) + \\epsilon$$</p>
+                          <p>Given $n$ samples and $p$ features, the input data is $$\\mathbf{X}\\in {\\mathrm{I\\!R}}^{n\\times p}, y\\in {\\mathrm{I\\!R}}^n$$</p>
+                          <p>Here we consider $\\epsilon \\sim N(0, 1)$, and vary the <strong>covariance structure of $X$</strong> and the <strong>data model $f$</strong> (you can select from the below drop-down menu):</p>")
 fluid_row1_github_action = fluidRow(
   column(12,
-         withMathJax(HTML("$$\\mathbf{X}\\in {\\mathrm{I\\!R}}^{n\\times p}, y\\in {\\mathrm{I\\!R}}^n$$")),
          selectInput("data.action.x",
                      "Structure of X:",
-                     choices = c(Independent = "indep", `AR(1)` = "ar1", `AR(1)+` = "ar1+", Factor = "factor"),
+                     choices = choices.x.structure,
                      selected = "indep"),
          uiOutput("formula.action.x"),
          selectInput("data.action",
                      "Data Model:",
-                     choices = c(Friedman = "sim_friedman", Checkerboard = "sim_checkerboard", Linear = "sim_linear", Max = "sim_max"),
+                     choices = choices.data.model,
                      selected = "sim_friedman"),
          uiOutput("formula.action")
   ))
@@ -47,17 +63,10 @@ fluid_row2_github_action = fluidRow(
 
 fluid_row1_github_action_real = fluidRow(
   column(12,
-         withMathJax(HTML("$$\\mathbf{X}\\in {\\mathrm{I\\!R}}^{n\\times p}, y\\in {\\mathrm{I\\!R}}^n$$")),
+         p("You can select the real dataset from the below drop-down menu:"),
          selectInput("real.data.action",
                      "Real Data",
-                     choices = c(CASP = "CASP",
-                                 Energy = "Energy",
-                                 AirQuality = "AirQuality",
-                                 BiasCorrection = "BiasCorrection",
-                                 ElectricalStability = "ElectricalStability",
-                                 GasTurbine = "GasTurbine",
-                                 ResidentialBuilding = "ResidentialBuilding",
-                                 LungCancerGenomic = "LungCancerGenomic"),
+                     choices = choices.real.data,
                      selected = "CASP")
   ))
 
@@ -82,17 +91,17 @@ fluid_row2_github_action_real = fluidRow(
 
 fluid_row1_local = fluidRow(
   column(12,
-         withMathJax(HTML("$$\\mathbf{X}\\in {\\mathrm{I\\!R}}^{n\\times p}, y\\in {\\mathrm{I\\!R}}^n$$")),
          selectInput("data.x",
                      "Structure of X:",
-                     choices = c(Independent = "indep", `AR(1)` = "ar1", `AR(1)+` = "ar1+", Factor = "factor"),
+                     choices = choices.x.structure,
                      selected = "indep"),
          uiOutput("formula.x"),
          selectInput("data",
                      "Data Model:",
-                     choices = c(Friedman = "sim_friedman", Checkerboard = "sim_checkerboard", Linear = "sim_linear", Max = "sim_max"),
+                     choices = choices.data.model,
                      selected = "sim_friedman"),
          uiOutput("formula"),
+         HTML("<p>Since we considered different combinations of $(n, p)$, you can select $n$ (or $p$) as the x-axis, and check the trend along $p$ (or $n$)</p>"),
          selectInput("x.axis",
                      "x-axis:",
                      choices = c(`Sample Size (n)` = "n", `Number of Features (p)` = "p"),
@@ -120,16 +129,10 @@ fluid_row2_local = fluidRow(
 
 fluid_row1_local_real = fluidRow(
   column(12,
-         withMathJax(HTML("$$\\mathbf{X}\\in {\\mathrm{I\\!R}}^{n\\times p}, y\\in {\\mathrm{I\\!R}}^n$$")),
+         p("You can select the real dataset from the below drop-down menu:"),
          selectInput("real.data",
                      "Real Data:",
-                     choices = c(CASP = "CASP", Energy = "Energy",
-                                 AirQuality = "AirQuality",
-                                 BiasCorrection = "BiasCorrection",
-                                 ElectricalStability = "ElectricalStability",
-                                 GasTurbine = "GasTurbine",
-                                 ResidentialBuilding = "ResidentialBuilding",
-                                 LungCancerGenomic = "LungCancerGenomic"),
+                     choices = choices.real.data,
                      selected = "CASP")
   ))
 
@@ -180,6 +183,11 @@ tab_local =   tabPanel("Local Results",
                        fluid_row1_local,
                        fluid_row2_local
 )
+tips_figure = HTML("<p>&#10071; <strong>Tips:</strong> The figures are interactive, powered by Plotly. For example, you can hide or highlight methods by clicking on their names in the legend.
+              </p>")
+desc_realdata = HTML("
+              <p>Here are real datasets we conducted benchmarking experiments. The input is $\\mathbf{X}\\in {\\mathrm{I\\!R}}^{n\\times p}, y\\in {\\mathrm{I\\!R}}^n$.</p>
+              ")
 ui = page_navbar(
   title = "Benchmarking Tree Regressions",
   header = header,
@@ -211,9 +219,11 @@ ui = page_navbar(
             uiOutput("intro_panel_md"),
             footer),
   nav_panel(title = "GA Simulations",
-            uiOutput("right_top_md"),
             uiOutput("action_md"),
+            setup_html,
+            HTML("<p>Due to limited computational resources in Github Action, here we focus on $n = 100, p = 20$ situation. For other combinations of $(n, p)$, please check the <strong>Local Simulations</strong> part, in which more experiments has been conducted in HPC.</p>"),
             fluid_row1_github_action,
+            tips_figure,
             fluid_row2_github_action,
             footer
   ),
@@ -224,24 +234,24 @@ ui = page_navbar(
            by GitHub actions, here we present more results which is run locally on HPC.
            You can also reproduce the results on your own machines."
             ),
+            setup_html,
             fluid_row1_local,
+            tips_figure,
             fluid_row2_local,
             footer
   ),
   nav_panel(title = "GA Real Data",
-            p("
-              Here are real datsets we conducted benchmarking experiments.
-              "),
+            desc_realdata,
             tableOutput("real_data_meta"),
             fluid_row1_github_action_real,
+            tips_figure,
             fluid_row2_github_action_real,
             footer),
   nav_panel(title = "Local Real Data",
-            p("
-              Here are real datsets we conducted benchmarking experiments.
-              "),
+            desc_realdata,
             tableOutput("real_data_meta2"),
             fluid_row1_local_real,
+            tips_figure,
             fluid_row2_local_real,
             footer),
   nav_spacer(),
@@ -295,11 +305,9 @@ server <- function(input, output) {
       - by default, the `df` in `penalty` of [![](https://img.shields.io/badge/R-earth-blue)](https://cran.r-project.org/web/packages/earth/index.html) is `degree + 1`. [Wang, Zhao, & Fan (2024)](https://doi.org/10.1080/10618600.2024.2388545) suggests setting an adaptive `penalty` to fulfill the consistency of DoF.
 
   "
-  right_top_md = "
-  The datasets with detailed generating model can be selected from the following drop-down menu.
-
-  **Tips:** The figures are interactive, powered by Plotly. For example, you can hide or highlight methods by clicking on their names in the legend.
-  "
+  # plotly_tips_md = "
+  # > &#10071; **Tips:** The figures are interactive, powered by Plotly. For example, you can hide or highlight methods by clicking on their names in the legend.
+  # "
   intro_panel_md = "
   The project is partially inspired by [benchopt](https://github.com/benchopt/benchopt), but aimed for a more **R-user-friendly, easily-hacking, more statistically** benchmarking.
 
@@ -324,9 +332,9 @@ server <- function(input, output) {
   output$action_md = renderUI({
     HTML(add_target_blank(markdown::markdownToHTML(text = action_md, fragment.only = TRUE)))
   })
-  output$right_top_md = renderUI({
-    HTML(add_target_blank(markdown::markdownToHTML(text = right_top_md, fragment.only = TRUE)))
-  })
+  # output$right_top_md = renderUI({
+  #   HTML(add_target_blank(markdown::markdownToHTML(text = right_top_md, fragment.only = TRUE)))
+  # })
   output$intro_panel_md = renderUI({
     HTML(add_target_blank(markdown::markdownToHTML(text = intro_panel_md, fragment.only = TRUE)))
   })
@@ -390,11 +398,13 @@ server <- function(input, output) {
     if (x == "sim_friedman") {
       withMathJax(HTML("$$y = 10\\sin(\\pi x_1x_2) + 20(x_3-0.5)^2 + 10x_4 + 5x_5 + N(0, 1)$$"))
     } else if (x == "sim_checkerboard") {
-      withMathJax(HTML("$$y = 2x_{50}x_{100} + 2x_{150}x_{200} + N(0, 1)$$"))
+      withMathJax(HTML("$$y = 2x_{1}x_{2} + 2x_{3}x_{4} + N(0, 1)$$"))
     } else if (x == "sim_linear") {
-      withMathJax(HTML("$$\\Sigma_{jk} = 0.5^{\\vert j-k\\vert} + 0.2I(i\\neq j)\\\\y = 2x_{50} + 2x_{100} + 4x_{150} + N(0, 1)$$"))
+      withMathJax(HTML("$$y = 2x_{1} + 2x_{2} + 4x_{3} + N(0, 1)$$"))
     } else if (x == "sim_max") {
       withMathJax(HTML("$$y = \\max(x_1, x_2, x_3) + N(0, 1)$$"))
+    } else if (x == "sim_singleIndex") {
+      withMathJax(HTML("$$y = 10\\sqrt{a} + \\sin(5a); a = \\sum_{j=1}^{10}(x_j - \\gamma_j)^2; \\gamma_j = -1.5 + \\frac{j-1}{3}$$"))
     }
   }
   fun_formula_x = function(x) {
