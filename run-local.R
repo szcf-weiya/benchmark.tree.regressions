@@ -37,8 +37,8 @@ stopifnot(length(lst_methods) == length(lst_methods_paras))
 df = para.benchmark(c("sim_friedman", "sim_checkerboard", "sim_linear", "sim_max", "sim_singleIndex"),
                lst_methods, lst_methods_paras,
                arr_structures = c("indep", "ar1", "ar1+", "factor"),
-               ns = c(100, 200, 500, 1000, 2000),
-               ps = c(20, 50, 100, 200, 500),
+               ns = c(100, 200, 500, 1000),
+               ps = c(20, 50, 100, 200),
                ncores = 10
 )
 saveRDS(df, "benchmark-tree-regressions/res-hpc.rds")
