@@ -408,6 +408,20 @@
       ],
       "Hash": "b4c06e554f33344e044ccd7fdca750a9"
     },
+    "dbarts": {
+      "Package": "dbarts",
+      "Version": "0.9-30",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "graphics",
+        "methods",
+        "parallel",
+        "stats"
+      ],
+      "Hash": "09e64b0f2c2e009e13be4451ef0fd700"
+    },
     "diagram": {
       "Package": "diagram",
       "Version": "1.6.5",

@@ -1,5 +1,11 @@
 bart_fit = function(x, y, xtest, ntree = 200) {
-  fit = BART::gbart(x, y, ntree = ntree)
+  fit = BART::gbart(x, y, ntree = ntree, ndpost = 1000L, nskip = 100L)
+  ypred = predict(fit, xtest)
+  colMeans(ypred)
+}
+
+dbarts_fit = function(x, y, xtest, ntree = 200) {
+  fit = dbarts::bart(x, y, ntree = ntree, keeptrees = TRUE, ndpost = 1000L, nskip = 100L)
   ypred = predict(fit, xtest)
   colMeans(ypred)
 }

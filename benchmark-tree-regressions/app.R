@@ -161,7 +161,7 @@ link_github = tags$a(
 )
 footer = tags$footer(div(
   style = "text-align: left; padding: 10px; position: fixed; bottom: 0; width: 100%; background-color: #f8f9fa; border-top: 1px solid #e9ecef;",
-  HTML(paste0('&copy; 2025 <a href="https://hohoweiya.xyz/">Lijun Wang</a>. Last updated: ', format(Sys.time(), "%Y-%m-%d %H:%M:%S %Z")))
+  HTML(paste0('&copy; 2025 <a href="https://hohoweiya.xyz/">Lijun Wang</a>. Last updated: ', system(command = 'git log -1 --format="%cd" --date=iso', intern = T)))
 ))
 header = tags$style(HTML("
     body {
@@ -281,6 +281,8 @@ server <- function(input, output) {
       - `ntree`: number of trees in the forest. The default number of trees is 200 for continuous outcomes.
       - `ndpost`: the number of posterior draws returned. The default in 1000.
       - `nskip`: number of burnin iterations. The default is 100.
+    - [![](https://img.shields.io/badge/R-dbarts-blue)](https://cran.r-project.org/web/packages/dbarts/index.html): `dbarts_{ntree}`
+      - same parameters as above: `ntree`, `ndpost`, and `nskip`
   - **Accelerated BART (XBART)**:
     - [![](https://img.shields.io/badge/R-XBART-blue)](https://github.com/JingyuHe/XBART): `XBART_{num_trees}_{num_sweeps}`
       - `num_trees`: number of trees in the forest
