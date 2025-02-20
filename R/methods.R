@@ -33,7 +33,7 @@ mars_fit = function(x, y, xtest, degree = 1, df.correct = FALSE, nrep = 10) {
 }
 
 xgboost_fit = function(x, y, xtest, nrounds = 100, early_stopping_rounds = NULL) {
-  fit = xgboost::xgboost(data = x, label = y, nrounds = nrounds, early_stopping_rounds = early_stopping_rounds)
+  fit = xgboost::xgboost(data = x, label = y, nrounds = nrounds, early_stopping_rounds = early_stopping_rounds, verbose = 0)
   ypred = predict(fit, xtest)
   ypred
 }

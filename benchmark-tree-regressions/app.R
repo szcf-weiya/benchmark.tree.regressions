@@ -224,6 +224,7 @@ ui = page_navbar(
             HTML("<p>Due to limited computational resources in Github Action, here we focus on $n = 100, p = 20$ situation. For other combinations of $(n, p)$, please check the <strong>Local Simulations</strong> part, in which more experiments has been conducted in HPC.</p>"),
             fluid_row1_github_action,
             tips_figure,
+            uiOutput("if_exist_na_action"),
             fluid_row2_github_action,
             footer
   ),
@@ -237,6 +238,7 @@ ui = page_navbar(
             setup_html,
             fluid_row1_local,
             tips_figure,
+            uiOutput("if_exist_na_local"),
             fluid_row2_local,
             footer
   ),
@@ -245,6 +247,7 @@ ui = page_navbar(
             tableOutput("real_data_meta"),
             fluid_row1_github_action_real,
             tips_figure,
+            uiOutput("if_exist_na_action_real"),
             fluid_row2_github_action_real,
             footer),
   nav_panel(title = "Local Real Data",
@@ -252,6 +255,7 @@ ui = page_navbar(
             tableOutput("real_data_meta2"),
             fluid_row1_local_real,
             tips_figure,
+            uiOutput("if_exist_na_local_real"),
             fluid_row2_local_real,
             footer),
   nav_spacer(),
@@ -463,6 +467,30 @@ server <- function(input, output) {
       legend.text = element_text(size = 12)                   # Legend text size
     )
 
+  output$if_exist_na_action = renderUI({
+    na_methods = as.character(df0()$method[which(is.na(df0()$runtime))])
+    if (length(na_methods) > 0)
+      HTML(paste0("<p>&#10071; <strong>Warnings: </strong>", paste0(na_methods, collapse = " "), " failed.</p>"))
+  })
+  output$if_exist_na_action_real = renderUI({
+    na_methods = as.character(df0.real()$method[which(is.na(df0.real()$runtime))])
+    if (length(na_methods) > 0)
+      HTML(paste0("<p>&#10071; <strong>Warnings: </strong>", paste0(na_methods, collapse = " "), " failed.</p>"))
+  })
+  output$if_exist_na_local = renderUI({
+    if (input$x.axis == "n") {
+      na_methods = unique(as.character(df.n()$method[which(is.na(df.n()$runtime))]))
+    } else {
+      na_methods = unique(as.character(df.p()$method[which(is.na(df.p()$runtime))]))
+    }
+    if (length(na_methods) > 0)
+      HTML(paste0("<p>&#10071; <strong>Warnings: </strong>", paste0(na_methods, collapse = " "), " failed.</p>"))
+  })
+  output$if_exist_na_local_real = renderUI({
+    na_methods = as.character(df1.real()$method[which(is.na(df1.real()$runtime))])
+    if (length(na_methods) > 0)
+      HTML(paste0("<p>&#10071; <strong>Warnings: </strong>", paste0(na_methods, collapse = " "), " failed.</p>"))
+  })
   output$ly_errplot_action = renderPlotly({
     plot_ly(df0(), x = ~method, y=~cv.error, type = "bar", color = ~group) %>% layout(barmode = "stack")
   })
