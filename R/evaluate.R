@@ -47,7 +47,9 @@ benchmark = function(arr_data, arr_methods, arr_paras, arr_structures = c("indep
       data = get(arr_data[i])()
       for (m in 1:nmethod) {
         method = arr_methods[m]
-        tmp = evaluate(data$x, data$y, get(method), paras = arr_paras[[m]])
+        cat("\n\n==== data =", data, "method =", method, "====\n\n")
+        tmp = tryCatch(evaluate(data$x, data$y, get(method), paras = arr_paras[[m]]),
+                       error = function(e) list(NA, NA))
         df = rbind(df, c(arr_data[i], "", nrow(data$x), ncol(data$x), names.method[m], unlist(tmp)))
       }
     }

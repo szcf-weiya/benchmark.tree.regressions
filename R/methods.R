@@ -5,7 +5,8 @@ bart_fit = function(x, y, xtest, ntree = 200) {
 }
 
 dbarts_fit = function(x, y, xtest, ntree = 200) {
-  fit = dbarts::bart(x, y, ntree = ntree, keeptrees = TRUE, ndpost = 1000L, nskip = 100L)
+  fit = dbarts::bart(x, y, ntree = ntree, keeptrees = TRUE, ndpost = 1000L, nskip = 100L,
+                     sigest = ifelse(ncol(x) >= nrow(x) - 1, 1.0, NA)) # a temp workaround for p >= n-1 (see #15)
   ypred = predict(fit, xtest)
   colMeans(ypred)
 }
