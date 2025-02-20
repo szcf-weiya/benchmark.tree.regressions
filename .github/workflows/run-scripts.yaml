@@ -55,6 +55,9 @@ jobs:
         name: results
         path: benchmark-tree-regressions/*.rds
 
+    - name: Set commit date
+      run: echo "GIT_COMMIT_DATE=$(git log -1 --format='%cd' --date=iso)" >> $GITHUB_ENV
+
     - name: Build site
       shell: Rscript {0}
       run: |

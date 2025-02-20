@@ -161,7 +161,7 @@ link_github = tags$a(
 )
 footer = tags$footer(div(
   style = "text-align: left; padding: 10px; position: fixed; bottom: 0; width: 100%; background-color: #f8f9fa; border-top: 1px solid #e9ecef;",
-  HTML(paste0('&copy; 2025 <a href="https://hohoweiya.xyz/">Lijun Wang</a>. Last updated: ', system(command = 'git log -1 --format="%cd" --date=iso', intern = T)))
+  HTML(paste0('&copy; 2025 <a href="https://hohoweiya.xyz/">Lijun Wang</a>. Last updated: ', Sys.getenv("GIT_COMMIT_DATE", "Unknown")))
 ))
 header = tags$style(HTML("
     body {
