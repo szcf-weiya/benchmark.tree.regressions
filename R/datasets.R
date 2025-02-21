@@ -135,12 +135,48 @@ prepare_data = function(prefix = "./") {
   }
 }
 
+download_with_retry <- function(url, destfile, max_attempts = 5, wait_time = 5) {
+  attempt <- 0
+  success <- FALSE
+
+  while (attempt < max_attempts && !success) {
+    attempt <- attempt + 1
+    h <- curl::new_handle()
+
+    # Check if a partial file exists and resume if needed
+    if (file.exists(destfile)) {
+      downloaded_size <- file.info(destfile)$size
+      if (downloaded_size > 0) {
+        curl::handle_setheaders(h, "Range" = paste0("bytes=", downloaded_size, "-"))
+      }
+    }
+
+    # Set timeout options to handle bad network
+    curl::handle_setopt(h, connecttimeout = 30, timeout = 120)  # Adjust as needed
+
+    try({
+      curl::curl_download(url, destfile, handle = h)
+      success <- TRUE  # If no error, mark as successful
+    }, silent = TRUE)
+
+    if (!success) {
+      message("Download failed, retrying... (Attempt ", attempt, " of ", max_attempts, ")")
+      Sys.sleep(wait_time)  # Wait before retrying
+    }
+  }
+
+  if (!success) {
+    stop("Download failed after multiple attempts.")
+  }
+}
+
 download.data = function(prefix = "./real_data/", dataname = "CASP") {
   zipfile = paste0(prefix, dataname, ".zip")
   destfolder = paste0(prefix, dataname, "/")
   if (length(list.files(destfolder)) == 0) {
     if (!file.exists(zipfile)) {
-      download.file(lst_real_data[[dataname]][3], destfile = zipfile)
+      #download.file(lst_real_data[[dataname]][3], destfile = zipfile)
+      download_with_retry(lst_real_data[[dataname]][3], zipfile)
     }
     unzip(zipfile, exdir = destfolder)
   }
@@ -226,7 +262,8 @@ real_LungCancerGenomic = function(prefix = "./real_data/") {
   if (!file.exists(destfile)) {
     if (!dir.exists(destfolder))
       dir.create(destfolder)
-    download.file("https://github.com/jedazard/PRIMsrc/raw/refs/heads/master/data/Real.2.rda", destfile = destfile)
+    #download.file("https://github.com/jedazard/PRIMsrc/raw/refs/heads/master/data/Real.2.rda", destfile = destfile)
+    download_with_retry("https://github.com/jedazard/PRIMsrc/raw/refs/heads/master/data/Real.2.rda", destfile)
   }
   load(destfile)
   list(x = as.matrix(Real.2[, -1]),
