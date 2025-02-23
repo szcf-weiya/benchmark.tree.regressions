@@ -97,7 +97,10 @@ lst_real_data = list(
                           "https://archive.ics.uci.edu/static/public/437/residential+building+data+set.zip"),
   LungCancerGenomic = c("Lung cancer genomic data from the Chemores Cohort Study",
                         "https://github.com/jedazard/PRIMsrc/blob/master/data/Real.2.rda",
-                        "https://github.com/jedazard/PRIMsrc/raw/refs/heads/master/data/Real.2.rda")
+                        "https://github.com/jedazard/PRIMsrc/raw/refs/heads/master/data/Real.2.rda"),
+  GSE65904 = c("Whole-genome expression analysis of melanoma tumor biopsies from a population-based cohort",
+               "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE65904",
+               "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE65904")
 )
 
 print_to_readme = function() {
@@ -268,4 +271,17 @@ real_LungCancerGenomic = function(prefix = "./real_data/") {
   load(destfile)
   list(x = as.matrix(Real.2[, -1]),
        y = Real.2[, 1])
+}
+
+real_GSE65904 = function() {
+  gse = GEOquery::getGEO("GSE65904")
+  exprs_matrix <- Biobase::exprs(gse[[1]])
+  pheno_data <- Biobase::pData(gse[[1]])
+  y = as.numeric(pheno_data$`disease specific survival in days:ch1`)
+  # remove NA
+  idx = !is.na(y)
+  y = y[idx]
+  x = t(exprs_matrix[, idx])
+  x = log2(x + 1) # normalize
+  list(x = x, y = y)
 }

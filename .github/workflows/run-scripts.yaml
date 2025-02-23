@@ -48,15 +48,17 @@ jobs:
       run: |
         Rscript run-action.R
 
+    - name: Set commit date
+      run: echo "$(git log -1 --format='%cd' --date=iso)" >> benchmark-tree-regressions/version.txt
+
     # Step 5: Save the results (as an artifact)
     - name: Upload results as an artifact
       uses: actions/upload-artifact@v4
       with:
         name: results
-        path: benchmark-tree-regressions/*.rds
-
-    - name: Set commit date
-      run: echo "GIT_COMMIT_DATE=$(git log -1 --format='%cd' --date=iso)" >> ~/.Renviron
+        path: |
+          benchmark-tree-regressions/*.rds
+          benchmark-tree-regressions/version.txt
 
     - name: Build site
       shell: Rscript {0}

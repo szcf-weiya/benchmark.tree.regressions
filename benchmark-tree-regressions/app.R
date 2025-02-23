@@ -159,9 +159,13 @@ link_github = tags$a(
   href = "https://github.com/szcf-weiya/benchmark.tree.regressions/",
   target = "_blank"
 )
+commit_date = tryCatch(
+  readLines("version.txt")[1],
+  error = function(e) "Unknown"
+)
 footer = tags$footer(div(
   style = "text-align: left; padding: 10px; position: fixed; bottom: 0; width: 100%; background-color: #f8f9fa; border-top: 1px solid #e9ecef;",
-  HTML(paste0('&copy; 2025 <a href="https://hohoweiya.xyz/">Lijun Wang</a>. Last updated: ', Sys.getenv("GIT_COMMIT_DATE", "Unknown")))
+  HTML(paste0('&copy; 2025 <a href="https://hohoweiya.xyz/">Lijun Wang</a>. Last updated: ', commit_date))
 ))
 header = tags$style(HTML("
     body {
