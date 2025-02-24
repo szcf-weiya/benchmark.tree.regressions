@@ -37,14 +37,14 @@ lst_methods_paras = list(list(ntree = 100), #list(ntree = 200), list(ntree = 500
 stopifnot(length(lst_methods) == length(lst_methods_paras))
 
 
-df = para.benchmark(c("sim_friedman", "sim_checkerboard", "sim_linear", "sim_max", "sim_singleIndex"),
-               lst_methods, lst_methods_paras,
-               arr_structures = c("indep", "ar1", "ar1+", "factor"),
-               ns = c(100, 200, 500, 1000),
-               ps = c(20, 50, 100, 200),
-               ncores = 10
-)
-saveRDS(df, "benchmark-tree-regressions/res-hpc.rds")
+#df = para.benchmark(c("sim_friedman", "sim_checkerboard", "sim_linear", "sim_max", "sim_singleIndex"),
+#               lst_methods, lst_methods_paras,
+#               arr_structures = c("indep", "ar1", "ar1+", "factor"),
+#               ns = c(100, 200, 500, 1000),
+#               ps = c(20, 50, 100, 200),
+#               ncores = 10
+#)
+#saveRDS(df, "benchmark-tree-regressions/res-hpc.rds")
 
 # some issue with para.benchmark for local (TODO)
 df_real = benchmark(c("real_CASP", "real_Energy",
