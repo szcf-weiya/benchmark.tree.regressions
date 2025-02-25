@@ -26,6 +26,8 @@ choices.real.data = c(CASP = "CASP",
                       GasTurbine = "GasTurbine",
                       ResidentialBuilding = "ResidentialBuilding",
                       LungCancerGenomic = "LungCancerGenomic")
+choices.real.data.local = c(choices.real.data,
+                            GSE65904 = "GSE65904")
 setup_html = HTML("<p>All data-generating processes are homoscedastic additive error models: $$Y = f(X) + \\epsilon$$</p>
                           <p>Given $n$ samples and $p$ features, the input data is $$\\mathbf{X}\\in {\\mathrm{I\\!R}}^{n\\times p}, y\\in {\\mathrm{I\\!R}}^n$$</p>
                           <p>Here we consider $\\epsilon \\sim N(0, 1)$, and vary the <strong>covariance structure of $X$</strong> and the <strong>data model $f$</strong> (you can select from the below drop-down menu):</p>")
@@ -132,7 +134,7 @@ fluid_row1_local_real = fluidRow(
          p("You can select the real dataset from the below drop-down menu:"),
          selectInput("real.data",
                      "Real Data:",
-                     choices = choices.real.data,
+                     choices = choices.real.data.local,
                      selected = "CASP")
   ))
 
@@ -356,7 +358,7 @@ server <- function(input, output) {
   # )
   real.data.meta = readRDS("real-data-meta.rds")
   output$real_data_meta = renderTable({
-    real.data.meta
+    real.data.meta[!grepl("GSE", real.data.meta$Data, fixed = TRUE), ]
   }, sanitize.text.function = identity)
   output$real_data_meta2 = renderTable({
     real.data.meta
