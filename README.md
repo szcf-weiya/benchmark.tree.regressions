@@ -35,6 +35,8 @@ For the real datasets, we consider
 | GasTurbine | Gas Turbine CO and NOx Emission Data Set | 36733 | 10 | [:link:](https://archive.ics.uci.edu/dataset/551/gas+turbine+co+and+nox+emission+data+set) |
 | ResidentialBuilding | Residential Building | 372 | 107 | [:link:](https://archive.ics.uci.edu/dataset/437/residential+building+data+set) |
 | LungCancerGenomic | Lung cancer genomic data from the Chemores Cohort Study | 123 | 945 | [:link:](https://github.com/jedazard/PRIMsrc/blob/master/data/Real.2.rda) |
+| StructureActivity | Qualitative Structure Activity Relationships (triazines) | 186 | 60 | [:link:](https://archive.ics.uci.edu/dataset/85/qualitative+structure+activity+relationships) |
+| BloodBrain | Blood Brain Barrier Data `data("BloodBrain", package = "caret")` | 208 | 134 | [:link:](https://github.com/topepo/caret/blob/master/pkg/caret/data/BloodBrain.RData) |
 | GSE65904 | Whole-genome expression analysis of melanoma tumor biopsies from a population-based cohort. | 210 | 47323 | [:link:](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE65904) |
 
 #### [methods.R](R/methods.R): each method is defined as a function and with tuning parameters

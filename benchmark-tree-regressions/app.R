@@ -50,7 +50,7 @@ fluid_row2_github_action = fluidRow(
          fluidRow(
            column(12,
                   card(
-                    card_header("5-fold CV Error", container = htmltools::h3),
+                    card_header("5-fold CV MSE", container = htmltools::h3),
                     plotlyOutput("ly_errplot_action"))
            ),
            column(12,
@@ -77,7 +77,7 @@ fluid_row2_github_action_real = fluidRow(
          fluidRow(
            column(12,
                   card(
-                    card_header("5-fold CV Error", container = htmltools::h3),
+                    card_header("5-fold CV MSE", container = htmltools::h3),
                     plotlyOutput("ly_errplot_action_real"))
            ),
            column(12,
@@ -116,7 +116,7 @@ fluid_row2_local = fluidRow(
          fluidRow(
            column(12,
                   card(
-                    card_header("5-fold CV Error", container = htmltools::h3),
+                    card_header("5-fold CV MSE", container = htmltools::h3),
                     plotlyOutput("ly_errplot"))
            ),
            column(12,
@@ -143,7 +143,7 @@ fluid_row2_local_real = fluidRow(
          fluidRow(
            column(12,
                   card(
-                    card_header("5-fold CV Error", container = htmltools::h3),
+                    card_header("5-fold CV MSE", container = htmltools::h3),
                     plotlyOutput("ly_errplot_real"))
            ),
            column(12,
@@ -191,6 +191,7 @@ tab_local =   tabPanel("Local Results",
 )
 tips_figure = HTML("<p>&#10071; <strong>Tips:</strong> The figures are interactive, powered by Plotly. For example, you can hide or highlight methods by clicking on their names in the legend.
               </p>")
+tips_realdata = HTML("<p>&#10071; <strong>Tips:</strong> All preparation (pre-processing) steps for the real data, starting from downloading from the given URL, are available at <a href='https://github.com/szcf-weiya/benchmark.tree.regressions/blob/master/R/datasets.R'>R/datasets.R</a>.</p>")
 desc_realdata = HTML("
               <p>Here are real datasets we conducted benchmarking experiments. The input is $\\mathbf{X}\\in {\\mathrm{I\\!R}}^{n\\times p}, y\\in {\\mathrm{I\\!R}}^n$.</p>
               ")
@@ -251,6 +252,7 @@ ui = page_navbar(
   nav_panel(title = "GA Real Data",
             desc_realdata,
             tableOutput("real_data_meta"),
+            tips_realdata,
             fluid_row1_github_action_real,
             tips_figure,
             uiOutput("if_exist_na_action_real"),
@@ -259,6 +261,7 @@ ui = page_navbar(
   nav_panel(title = "Local Real Data",
             desc_realdata,
             tableOutput("real_data_meta2"),
+            tips_realdata,
             fluid_row1_local_real,
             tips_figure,
             uiOutput("if_exist_na_local_real"),
@@ -315,7 +318,12 @@ server <- function(input, output) {
       - `degree`: linear model (`degree` = 1) or interaction model (`degree` = 2)
     - [![](https://img.shields.io/badge/R-earth.dof.patch-blue)](https://github.com/szcf-weiya/earth.dof.patch): a patch for a modified degrees of freedom (DoF) on [![](https://img.shields.io/badge/R-earth-blue)](https://cran.r-project.org/web/packages/earth/index.html): `earth_{degree}_df`
       - by default, the `df` in `penalty` of [![](https://img.shields.io/badge/R-earth-blue)](https://cran.r-project.org/web/packages/earth/index.html) is `degree + 1`. [Wang, Zhao, & Fan (2024)](https://doi.org/10.1080/10618600.2024.2388545) suggests setting an adaptive `penalty` to fulfill the consistency of DoF.
+  - **Baseline Method**: the mean
 
+  The performance metrics include:
+
+  - **5-fold CV MSE**: $\\mathbb{E}[(Y - \\hat f(X))^2]$
+  - **running time**
   "
   # plotly_tips_md = "
   # > &#10071; **Tips:** The figures are interactive, powered by Plotly. For example, you can hide or highlight methods by clicking on their names in the legend.

@@ -8,7 +8,8 @@ lst_methods = c(rep("bart_fit", 3),
                 rep("mars_fit", 4),
                 rep("ranger_fit", 3),
                 rep("rf_fit", 3),
-                rep("xgboost_fit", 1))
+                rep("xgboost_fit", 1),
+                "mean_fit")
 names_lst_methods = c("BART_50", "BART_100", "BART_200",
                       "dbarts_50", "dbarts_100", "dbarts_200",
                       "XBART_10_40", "XBART_100_40", #"XBART_500_40", #"XBART_200_20", "XBART_200_80",
@@ -16,7 +17,8 @@ names_lst_methods = c("BART_50", "BART_100", "BART_200",
                       "ranger_50", "ranger_100", "ranger_200",
                        "randomForest_50", "randomForest_100", "randomForest_200",
                       # "XGBoost_100_NULL",
-                      "XGBoost_100_3")
+                      "XGBoost_100_3",
+                      "Baseline_mean")
 stopifnot(length(lst_methods) == length(names_lst_methods))
 names(lst_methods) = names_lst_methods
 lst_methods_paras = list(list(ntree = 50), list(ntree = 100), list(ntree = 200),
@@ -33,5 +35,6 @@ lst_methods_paras = list(list(ntree = 50), list(ntree = 100), list(ntree = 200),
                          list(num.trees = 50), list(num.trees = 100), list(num.trees = 200),
                          list(ntree = 50), list(ntree = 100), list(ntree = 200),
                          #list(nrounds = 1000, early_stopping_rounds = NULL),
-                         list(nrounds = 1000, early_stopping_rounds = 3))
+                         list(nrounds = 1000, early_stopping_rounds = 3),
+                         NULL)
 stopifnot(length(lst_methods) == length(lst_methods_paras))

@@ -60,6 +60,13 @@ jobs:
           benchmark-tree-regressions/*.rds
           benchmark-tree-regressions/version.txt
 
+    - name: Upload results as an artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: real-data
+        path: |
+          real_data/
+
     - name: Build site
       shell: Rscript {0}
       run: |

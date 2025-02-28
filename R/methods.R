@@ -1,3 +1,8 @@
+# baseline
+mean_fit = function(x, y, xtest) {
+  rep(mean(y), nrow(xtest))
+}
+
 bart_fit = function(x, y, xtest, ntree = 200) {
   fit = BART::gbart(x, y, ntree = ntree, ndpost = 1000L, nskip = 100L)
   ypred = predict(fit, xtest)

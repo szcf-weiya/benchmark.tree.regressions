@@ -98,6 +98,12 @@ lst_real_data = list(
   LungCancerGenomic = c("Lung cancer genomic data from the Chemores Cohort Study",
                         "https://github.com/jedazard/PRIMsrc/blob/master/data/Real.2.rda",
                         "https://github.com/jedazard/PRIMsrc/raw/refs/heads/master/data/Real.2.rda"),
+  StructureActivity = c("Qualitative Structure Activity Relationships (triazines)",
+                        "https://archive.ics.uci.edu/dataset/85/qualitative+structure+activity+relationships",
+                        "https://archive.ics.uci.edu/static/public/85/qualitative+structure+activity+relationships.zip"),
+  BloodBrain = c("Blood Brain Barrier Data `data(\"BloodBrain\", package = \"caret\")`",
+                 "https://github.com/topepo/caret/blob/master/pkg/caret/data/BloodBrain.RData",
+                 "https://github.com/topepo/caret/blob/master/pkg/caret/data/BloodBrain.RData"),
   GSE65904 = c("Whole-genome expression analysis of melanoma tumor biopsies from a population-based cohort",
                "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE65904",
                "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE65904")
@@ -271,6 +277,24 @@ real_LungCancerGenomic = function(prefix = "./real_data/") {
   load(destfile)
   list(x = as.matrix(Real.2[, -1]),
        y = Real.2[, 1])
+}
+
+real_StructureActivity = function(prefix = "./real_data/") {
+  download.data(prefix = prefix, dataname = "StructureActivity")
+  tarfile = paste0(prefix, "/StructureActivity/drug_data")
+  tarfolder = paste0(prefix, "/StructureActivity/")
+  system(paste0("tar xf ", tarfile, " -C ", tarfolder))
+  system(paste0("uncompress ", tarfolder, "data/triazines/reg/*.Z"))
+  datafolder = paste0(tarfolder, "data/triazines/reg/")
+  tr0 = read.table(paste0(datafolder, "tr60_", 0, ".dat"))
+  te0 = read.table(paste0(datafolder, "te60_", 0, ".dat"))
+  t0 = rbind(tr0, te0) # I have verified sort(t1$V1) == sort(t0$V1)
+  list(x = t0[, -1], y = t0[, 1])
+}
+
+real_BloodBrain = function() {
+  data("BloodBrain", package = "caret")
+  list(x = bbbDescr, y = logBBB)
 }
 
 real_GSE65904 = function() {
