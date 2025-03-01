@@ -25,7 +25,9 @@ choices.real.data = c(CASP = "CASP",
                       ElectricalStability = "ElectricalStability",
                       GasTurbine = "GasTurbine",
                       ResidentialBuilding = "ResidentialBuilding",
-                      LungCancerGenomic = "LungCancerGenomic")
+                      LungCancerGenomic = "LungCancerGenomic",
+		      StructureActivity = "StructureActivity",
+		      BloodBrain = "BloodBrain")
 choices.real.data.local = c(choices.real.data,
                             GSE65904 = "GSE65904")
 setup_html = HTML("<p>All data-generating processes are homoscedastic additive error models: $$Y = f(X) + \\epsilon$$</p>
@@ -191,7 +193,7 @@ tab_local =   tabPanel("Local Results",
 )
 tips_figure = HTML("<p>&#10071; <strong>Tips:</strong> The figures are interactive, powered by Plotly. For example, you can hide or highlight methods by clicking on their names in the legend.
               </p>")
-tips_realdata = HTML("<p>&#10071; <strong>Tips:</strong> All preparation (pre-processing) steps for the real data, starting from downloading from the given URL, are available at <a href='https://github.com/szcf-weiya/benchmark.tree.regressions/blob/master/R/datasets.R'>R/datasets.R</a>.</p>")
+tips_realdata = HTML("<p>&#10071; <strong>Tips:</strong> All preparation (pre-processing) steps for the real data, starting from downloading from the given URL, are available at <a href='https://github.com/szcf-weiya/benchmark.tree.regressions/blob/master/R/datasets.R' target='_blank'>R/datasets.R</a>.</p>")
 desc_realdata = HTML("
               <p>Here are real datasets we conducted benchmarking experiments. The input is $\\mathbf{X}\\in {\\mathrm{I\\!R}}^{n\\times p}, y\\in {\\mathrm{I\\!R}}^n$.</p>
               ")
