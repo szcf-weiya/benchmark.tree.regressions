@@ -289,12 +289,12 @@ real_StructureActivity = function(prefix = "./real_data/") {
   tr0 = read.table(paste0(datafolder, "tr60_", 0, ".dat"))
   te0 = read.table(paste0(datafolder, "te60_", 0, ".dat"))
   t0 = rbind(tr0, te0) # I have verified sort(t1$V1) == sort(t0$V1)
-  list(x = t0[, -1], y = t0[, 1])
+  list(x = as.matrix(t0[, -1]), y = t0[, 1])
 }
 
 real_BloodBrain = function() {
   data("BloodBrain", package = "caret")
-  list(x = bbbDescr, y = logBBB)
+  list(x = as.matrix(bbbDescr), y = logBBB)
 }
 
 real_GSE65904 = function() {
