@@ -179,14 +179,15 @@ download_with_retry <- function(url, destfile, max_attempts = 5, wait_time = 5) 
   }
 
   if (!success) {
-    download.file(url, destfile)
-    #stop("Download failed after multiple attempts.")
+    stop("Download failed after multiple attempts.")
   }
 }
 
 download.data = function(prefix = "./real_data/", dataname = "CASP") {
   zipfile = paste0(prefix, dataname, ".zip")
   destfolder = paste0(prefix, dataname, "/")
+  if (!dir.exists(destfolder))
+    dir.create(destfolder, recursive = T)
   if (length(list.files(destfolder)) == 0) {
     if (!file.exists(zipfile)) {
       #download.file(lst_real_data[[dataname]][3], destfile = zipfile)
@@ -198,7 +199,6 @@ download.data = function(prefix = "./real_data/", dataname = "CASP") {
 
 # https://archive.ics.uci.edu/dataset/265/physicochemical+properties+of+protein+tertiary+structure
 real_CASP = function(prefix = "./real_data/") {
-  if (!dir.exists(prefix)) dir.create(prefix)
   download.data(prefix = prefix, dataname = "CASP")
   destfile = paste0(prefix, "CASP/", "CASP.csv")
   df = read.csv(destfile)
@@ -307,8 +307,7 @@ real_CaliforniaHousing = function(prefix = "./real_data/") {
   destfile = paste0(destfolder, "cadata.txt")
   if (!file.exists(destfile)) {
     if (!dir.exists(destfolder))
-      dir.create(destfolder)
-    #download.file("https://github.com/jedazard/PRIMsrc/raw/refs/heads/master/data/Real.2.rda", destfile = destfile)
+      dir.create(destfolder, recursive = T)
     download_with_retry(lst_real_data[["CaliforniaHousing"]][3], destfile)
   }
   df = read.table(paste0(prefix, "CaliforniaHousing/cadata.txt"), skip = 27)
