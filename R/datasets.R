@@ -74,6 +74,9 @@ sim_singleIndex = function(n = 500, p = 200, sigma = 1, structure = "indep") {
 
 # collection of real dataset
 lst_real_data = list(
+  CaliforniaHousing = c("California Housing",
+                        "https://github.com/szcf-weiya/ESL-CN/tree/master/data/Housing",
+                        "https://github.com/szcf-weiya/ESL-CN/raw/refs/heads/master/data/Housing/cadata.txt"),
   CASP = c("Physicochemical Properties of Protein Tertiary Structure",
            "https://archive.ics.uci.edu/dataset/265/physicochemical+properties+of+protein+tertiary+structure",
            "https://archive.ics.uci.edu/static/public/265/physicochemical+properties+of+protein+tertiary+structure.zip"),
@@ -295,6 +298,20 @@ real_StructureActivity = function(prefix = "./real_data/") {
 real_BloodBrain = function() {
   data("BloodBrain", package = "caret")
   list(x = as.matrix(bbbDescr), y = logBBB)
+}
+
+real_CaliforniaHousing = function(prefix = "./real_data/") {
+  destfolder = paste0(prefix, "CaliforniaHousing/")
+  destfile = paste0(destfolder, "cadata.txt")
+  if (!file.exists(destfile)) {
+    if (!dir.exists(destfolder))
+      dir.create(destfolder)
+    #download.file("https://github.com/jedazard/PRIMsrc/raw/refs/heads/master/data/Real.2.rda", destfile = destfile)
+    download_with_retry(lst_real_data[["CaliforniaHousing"]][3], destfile)
+  }
+  df = read.table("real_data/CaliforniaHousing/cadata.txt", skip = 27)
+  list(x = as.matrix(df[, -1]),
+       y = log(df[, 1]))
 }
 
 real_GSE65904 = function() {

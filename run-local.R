@@ -50,7 +50,7 @@ stopifnot(length(lst_methods) == length(lst_methods_paras))
 #saveRDS(df, "benchmark-tree-regressions/res-hpc.rds")
 
 # some issue with para.benchmark for local (TODO)
-df_real = benchmark(c("real_CASP", "real_Energy",
+df_real = benchmark(c("real_CaliforniaHousing", "real_CASP", "real_Energy",
                       "real_AirQuality", "real_BiasCorrection",
                       "real_ElectricalStability", "real_GasTurbine",
                       "real_ResidentialBuilding", "real_LungCancerGenomic",

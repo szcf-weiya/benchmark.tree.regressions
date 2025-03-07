@@ -27,6 +27,7 @@ For the real datasets, we consider
 
 | Data | Description | n | p | URL  | 
 |:----:|:------:|:--:|:--:|:-----------:|
+| CaliforniaHousing | California Housing | 20640 | 8 | [:link:](https://github.com/szcf-weiya/ESL-CN/tree/master/data/Housing) |
 | CASP | Physicochemical Properties of Protein Tertiary Structure | 45730 | 9 | [:link:](https://archive.ics.uci.edu/dataset/265/physicochemical+properties+of+protein+tertiary+structure) |
 | Energy | Appliances Energy Prediction | 19735 | 27 | [:link:](https://archive.ics.uci.edu/dataset/374/appliances+energy+prediction) |
 | AirQuality | Air Quality | 9357 | 12 | [:link:](https://archive.ics.uci.edu/dataset/360/air+quality) |
@@ -85,6 +86,29 @@ $ R
       user     system    elapsed
 518757.236   6565.216  59712.296
 ```
+
+## How to Contribute?
+
+> TODO: automate the procedure
+
+### Add a real data
+
+1. add data info into `lst_real_data` in `datasets.R`, and write out a meta data
+
+```r
+real.data.meta = df_data_meta()
+saveRDS(real.data.meta, file = "benchmark-tree-regressions/real-data-meta.rds")
+```
+  
+2. run `print_to_readme()` to update the table in this `README.md` file
+  
+3. add the preparation step for the data (starting from downloading the data) as a function `real_XXX` in `datasets.R`
+
+4. update the choices of down-menu in `app.R`
+
+5. update the execution code in `run-local.R` and `run-action.R`
+
+
 
 ## :notebook: Use the Repo as a Template
 

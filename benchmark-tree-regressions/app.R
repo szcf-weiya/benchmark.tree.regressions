@@ -18,7 +18,9 @@ choices.data.model = c(Friedman = "sim_friedman",
                        Max = "sim_max",
                        SingleIndex = "sim_singleIndex")
 choices.x.structure = c(Independent = "indep", `AR(1)` = "ar1", `AR(1)+` = "ar1+", Factor = "factor")
-choices.real.data = c(CASP = "CASP",
+choices.real.data = c(
+                      CaliforniaHousing = 'CaliforniaHousing',
+                      CASP = "CASP",
                       Energy = "Energy",
                       AirQuality = "AirQuality",
                       BiasCorrection = "BiasCorrection",
