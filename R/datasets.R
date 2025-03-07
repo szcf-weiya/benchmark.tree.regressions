@@ -173,12 +173,14 @@ download_with_retry <- function(url, destfile, max_attempts = 5, wait_time = 5) 
 
     if (!success) {
       message("Download failed, retrying... (Attempt ", attempt, " of ", max_attempts, ")")
+      cat("url = ", url, " dest = ", destfile, "\n")
       Sys.sleep(wait_time)  # Wait before retrying
     }
   }
 
   if (!success) {
-    stop("Download failed after multiple attempts.")
+    download.file(url, destfile)
+    #stop("Download failed after multiple attempts.")
   }
 }
 
@@ -309,7 +311,7 @@ real_CaliforniaHousing = function(prefix = "./real_data/") {
     #download.file("https://github.com/jedazard/PRIMsrc/raw/refs/heads/master/data/Real.2.rda", destfile = destfile)
     download_with_retry(lst_real_data[["CaliforniaHousing"]][3], destfile)
   }
-  df = read.table("real_data/CaliforniaHousing/cadata.txt", skip = 27)
+  df = read.table(paste0(prefix, "CaliforniaHousing/cadata.txt"), skip = 27)
   list(x = as.matrix(df[, -1]),
        y = log(df[, 1]))
 }
