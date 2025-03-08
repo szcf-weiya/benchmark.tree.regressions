@@ -195,7 +195,7 @@ tab_local =   tabPanel("Local Results",
 )
 tips_figure = HTML("<p>&#10071; <strong>Tips:</strong> The figures are interactive, powered by Plotly. For example, you can hide or highlight methods by clicking on their names in the legend.
               </p>")
-tips_realdata = HTML("<p>&#10071; <strong>Tips:</strong> All preparation (pre-processing) steps for the real data, starting from downloading from the given URL, are available at <a href='https://github.com/szcf-weiya/benchmark.tree.regressions/blob/master/R/datasets.R' target='_blank'>R/datasets.R</a>.</p>")
+tips_realdata = HTML("<p>&#10071; <strong>Tips:</strong> All preprocessing steps for the real data, beginning with downloading from the provided URL, are available in <a href='https://github.com/szcf-weiya/benchmark.tree.regressions/blob/master/R/datasets.R' target='_blank'>R/datasets.R</a>.</p>")
 desc_realdata = HTML("
               <p>Here are real datasets we conducted benchmarking experiments. The input is $\\mathbf{X}\\in {\\mathrm{I\\!R}}^{n\\times p}, y\\in {\\mathrm{I\\!R}}^n$.</p>
               ")

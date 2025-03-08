@@ -47,7 +47,7 @@ xgboost_fit = function(x, y, xtest, nrounds = 100, early_stopping_rounds = NULL)
 ranger_fit = function(x, y, xtest, num.trees = 500) {
   df = data.frame(x, y)
   # use the standard practice: mtry = [p / 3]
-  fit = ranger::ranger(y ~ ., data = df, num.trees = num.trees, mtry = floor(ncol(x) / 3))
+  fit = ranger::ranger(dependent.variable.name = "y", data = df, num.trees = num.trees, mtry = floor(ncol(x) / 3))
   ypred = predict(fit, data.frame(xtest))
   ypred$predictions
 }
