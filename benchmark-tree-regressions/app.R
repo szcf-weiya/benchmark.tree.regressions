@@ -19,6 +19,7 @@ choices.data.model = c(Friedman = "sim_friedman",
                        SingleIndex = "sim_singleIndex")
 choices.x.structure = c(Independent = "indep", `AR(1)` = "ar1", `AR(1)+` = "ar1+", Factor = "factor")
 choices.real.data = c(
+                      BostonHousing = 'BostonHousing',
                       CaliforniaHousing = 'CaliforniaHousing',
                       CASP = "CASP",
                       Energy = "Energy",

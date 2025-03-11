@@ -27,7 +27,8 @@ For the real datasets, we consider
 
 | Data | Description | n | p | URL  | 
 |:----:|:------:|:--:|:--:|:-----------:|
-| CaliforniaHousing | California Housing | 20640 | 8 | [:link:](https://github.com/szcf-weiya/ESL-CN/tree/master/data/Housing) |
+| BostonHousing | Housing values and other information about Boston census tracts. | 506 | 13 | [:link:](https://github.com/JWarmenhoven/ISLR-python/blob/master/Notebooks/Data/Boston.csv) |
+| CaliforniaHousing | Aggregated housing data from each of 20,640 neighborhoods (1990 census block groups) in California. | 20640 | 8 | [:link:](https://github.com/szcf-weiya/ESL-CN/tree/master/data/Housing) |
 | CASP | Physicochemical Properties of Protein Tertiary Structure | 45730 | 9 | [:link:](https://archive.ics.uci.edu/dataset/265/physicochemical+properties+of+protein+tertiary+structure) |
 | Energy | Appliances Energy Prediction | 19735 | 27 | [:link:](https://archive.ics.uci.edu/dataset/374/appliances+energy+prediction) |
 | AirQuality | Air Quality | 9357 | 12 | [:link:](https://archive.ics.uci.edu/dataset/360/air+quality) |

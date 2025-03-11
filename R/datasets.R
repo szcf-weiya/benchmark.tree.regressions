@@ -74,7 +74,10 @@ sim_singleIndex = function(n = 500, p = 200, sigma = 1, structure = "indep") {
 
 # collection of real dataset
 lst_real_data = list(
-  CaliforniaHousing = c("California Housing",
+  BostonHousing = c("Housing values and other information about Boston census tracts.",
+                "https://github.com/JWarmenhoven/ISLR-python/blob/master/Notebooks/Data/Boston.csv",
+                "https://github.com/JWarmenhoven/ISLR-python/raw/refs/heads/master/Notebooks/Data/Boston.csv"),
+  CaliforniaHousing = c("Aggregated housing data from each of 20,640 neighborhoods (1990 census block groups) in California.",
                         "https://github.com/szcf-weiya/ESL-CN/tree/master/data/Housing",
                         "https://github.com/szcf-weiya/ESL-CN/raw/refs/heads/master/data/Housing/cadata.txt"),
   CASP = c("Physicochemical Properties of Protein Tertiary Structure",
@@ -300,6 +303,19 @@ real_StructureActivity = function(prefix = "./real_data/") {
 real_BloodBrain = function() {
   data("BloodBrain", package = "caret")
   list(x = as.matrix(bbbDescr), y = logBBB)
+}
+
+real_BostonHousing = function(prefix = "./real_data/") {
+  destfolder = paste0(prefix, "BostonHousing/")
+  destfile = paste0(destfolder, "Boston.csv")
+  if (!file.exists(destfile)) {
+    if (!dir.exists(destfolder))
+      dir.create(destfolder, recursive = T)
+    download_with_retry(lst_real_data[["BostonHousing"]][3], destfile)
+  }
+  df = read.csv(paste0(prefix, "BostonHousing/Boston.csv"))
+  list(x = as.matrix(df[, -ncol(df)]),
+       y = log(df$medv))
 }
 
 real_CaliforniaHousing = function(prefix = "./real_data/") {
