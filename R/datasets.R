@@ -291,11 +291,15 @@ real_StructureActivity = function(prefix = "./real_data/") {
   download.data(prefix = prefix, dataname = "StructureActivity")
   tarfile = paste0(prefix, "/StructureActivity/drug_data")
   tarfolder = paste0(prefix, "/StructureActivity/")
-  system(paste0("tar xf ", tarfile, " -C ", tarfolder))
-  system(paste0("uncompress ", tarfolder, "data/triazines/reg/*.Z"))
   datafolder = paste0(tarfolder, "data/triazines/reg/")
-  tr0 = read.table(paste0(datafolder, "tr60_", 0, ".dat"))
-  te0 = read.table(paste0(datafolder, "te60_", 0, ".dat"))
+  target_train_file = paste0(datafolder, "tr60_", 0, ".dat")
+  target_test_file = paste0(datafolder, "te60_", 0, ".dat")
+  if (!(file.exists(target_test_file) && file.exists(target_test_file))) {
+    system(paste0("tar xf ", tarfile, " -C ", tarfolder))
+    system(paste0("gzip -d -f ", tarfolder, "data/triazines/reg/*.Z"))
+  }
+  tr0 = read.table(target_train_file)
+  te0 = read.table(target_test_file)
   t0 = rbind(tr0, te0) # I have verified sort(t1$V1) == sort(t0$V1)
   list(x = as.matrix(t0[, -1]), y = t0[, 1])
 }
