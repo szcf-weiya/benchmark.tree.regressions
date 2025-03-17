@@ -205,77 +205,77 @@ real_CASP = function(prefix = "./real_data/") {
   download.data(prefix = prefix, dataname = "CASP")
   destfile = paste0(prefix, "CASP/", "CASP.csv")
   df = read.csv(destfile)
-  list(x = as.matrix(df[, 2:ncol(df)]), y = df[, 1])
+  list(x = model.matrix(~ . - 1, df[, 2:ncol(df)]), y = df[, 1])
 }
 
 # https://archive.ics.uci.edu/dataset/374/appliances+energy+prediction
 real_Energy = function(prefix = "./real_data/") {
   download.data(prefix = prefix, dataname = "Energy")
-  destfile = paste0(prefix, "Energy/", "energydata_complete.csv")
+  destfile = file.path(prefix, "Energy/", "energydata_complete.csv")
   df = read.csv(destfile)
   # for simplicity, we exclude the date
   # NOTE: in the original data repo (https://github.com/LuisM78/Appliances-energy-prediction-data), they proposed to derive new features from the week status
-  list(x = as.matrix(df[, 3:ncol(df)]), y = df[, 2])
+  list(x = model.matrix(~. - 1, df[, 3:ncol(df)]), y = df[, 2])
 }
 
 # https://archive.ics.uci.edu/dataset/360/air+quality
 real_AirQuality = function(prefix = "./real_data/") {
   download.data(prefix = prefix, dataname = "AirQuality")
-  destfile = paste0(prefix, "AirQuality/", "AirQualityUCI.xlsx")
+  destfile = file.path(prefix, "AirQuality/", "AirQualityUCI.xlsx")
   df = as.data.frame(read_xlsx(destfile))
   # question: which one is the response?
-  list(x = as.matrix(df[, 4:ncol(df)]), y = df[, 3])
+  list(x = model.matrix(~ . - 1, df[, 4:ncol(df)]), y = df[, 3])
 }
 
 # https://archive.ics.uci.edu/dataset/514/bias+correction+of+numerical+prediction+model+temperature+forecast
 real_BiasCorrection = function(prefix = "./real_data/") {
   download.data(prefix = prefix, dataname = "BiasCorrection")
-  destfile = paste0(prefix, "BiasCorrection/", "Bias_correction_ucl.csv")
+  destfile = file.path(prefix, "BiasCorrection/", "Bias_correction_ucl.csv")
   df = read.csv(destfile)
   # rm NA values
   df = df[complete.cases(df[, 2:ncol(df)]),] # exclude the first column
   # take the Next_Tmax as output, (or Next_Tmin)
-  list(x = as.matrix(df[, 3:(ncol(df) - 2)]),
+  list(x = model.matrix(~. - 1, df[, 3:(ncol(df) - 2)]),
        y = df[, ncol(df) - 1])
 }
 
 # https://archive.ics.uci.edu/dataset/471/electrical+grid+stability+simulated+data
 real_ElectricalStability = function(prefix = "./real_data/") {
   download.data(prefix = prefix, dataname = "ElectricalStability")
-  destfile = paste0(prefix, "ElectricalStability/", "Data_for_UCI_named.csv")
+  destfile = file.path(prefix, "ElectricalStability/", "Data_for_UCI_named.csv")
   df = read.csv(destfile)
-  list(x = as.matrix(df[, 1:(ncol(df) - 2)]),
+  list(x = model.matrix(~. - 1, df[, 1:(ncol(df) - 2)]),
        y = df[, ncol(df) - 1])
 }
 
 # https://archive.ics.uci.edu/dataset/551/gas+turbine+co+and+nox+emission+data+set
 real_GasTurbine = function(prefix = "./real_data/") {
   download.data(prefix = prefix, dataname = "GasTurbine")
-  destfile = paste0(prefix, "GasTurbine/", "gt_2011.csv")
+  destfile = file.path(prefix, "GasTurbine/", "gt_2011.csv")
   df = read.csv(destfile)
   for (i in 2012:2015) {
-    destfile = paste0(prefix, "GasTurbine/", "gt_", i, ".csv")
+    destfile = file.path(prefix, "GasTurbine/", "gt_", i, ".csv")
     tmp = read.csv(destfile)
     df = rbind(df, tmp)
   }
-  list(x = as.matrix(df[, -8]),
+  list(x = model.matrix(~. - 1, df[, -8]),
        y = df[, 8]) # TEY as output
 }
 
 # https://archive.ics.uci.edu/dataset/437/residential+building+data+set
 real_ResidentialBuilding = function(prefix = "./real_data/") {
   download.data(prefix = prefix, dataname = "ResidentialBuilding")
-  destfile = paste0(prefix, "ResidentialBuilding/", "Residential-Building-Data-Set.xlsx")
+  destfile = file.path(prefix, "ResidentialBuilding/", "Residential-Building-Data-Set.xlsx")
   df = as.data.frame(suppressMessages(read_xlsx(destfile, skip = 1)));
-  list(x = as.matrix(df[, 1:(ncol(df) - 2)]),
+  list(x = model.matrix(~. - 1, df[, 1:(ncol(df) - 2)]),
        y = df[, ncol(df) - 1])
 }
 
 # https://rdrr.io/cran/PRIMsrc/man/Real.2-data.html
 # https://github.com/jedazard/PRIMsrc/blob/master/data/Real.2.rda
 real_LungCancerGenomic = function(prefix = "./real_data/") {
-  destfolder = paste0(prefix, "LungCancerGenomic/")
-  destfile = paste0(destfolder, "Real.2.rda")
+  destfolder = file.path(prefix, "LungCancerGenomic/")
+  destfile = file.path(destfolder, "Real.2.rda")
   if (!file.exists(destfile)) {
     if (!dir.exists(destfolder))
       dir.create(destfolder)
@@ -283,17 +283,17 @@ real_LungCancerGenomic = function(prefix = "./real_data/") {
     download_with_retry("https://github.com/jedazard/PRIMsrc/raw/refs/heads/master/data/Real.2.rda", destfile)
   }
   load(destfile)
-  list(x = as.matrix(Real.2[, -1]),
+  list(x = model.matrix(~. - 1, Real.2[, -1]),
        y = Real.2[, 1])
 }
 
 real_StructureActivity = function(prefix = "./real_data/") {
   download.data(prefix = prefix, dataname = "StructureActivity")
-  tarfile = paste0(prefix, "/StructureActivity/drug_data")
-  tarfolder = paste0(prefix, "/StructureActivity/")
-  datafolder = paste0(tarfolder, "data/triazines/reg/")
-  target_train_file = paste0(datafolder, "tr60_", 0, ".dat")
-  target_test_file = paste0(datafolder, "te60_", 0, ".dat")
+  tarfile = file.path(prefix, "/StructureActivity/drug_data")
+  tarfolder = file.path(prefix, "/StructureActivity/")
+  datafolder = file.path(tarfolder, "data/triazines/reg/")
+  target_train_file = file.path(datafolder, "tr60_", 0, ".dat")
+  target_test_file = file.path(datafolder, "te60_", 0, ".dat")
   if (!(file.exists(target_test_file) && file.exists(target_test_file))) {
     system(paste0("tar xf ", tarfile, " -C ", tarfolder))
     system(paste0("gzip -d -f ", tarfolder, "data/triazines/reg/*.Z"))
@@ -301,37 +301,37 @@ real_StructureActivity = function(prefix = "./real_data/") {
   tr0 = read.table(target_train_file)
   te0 = read.table(target_test_file)
   t0 = rbind(tr0, te0) # I have verified sort(t1$V1) == sort(t0$V1)
-  list(x = as.matrix(t0[, -1]), y = t0[, 1])
+  list(x = model.matrix(~. - 1, t0[, -1]), y = t0[, 1])
 }
 
 real_BloodBrain = function() {
   data("BloodBrain", package = "caret")
-  list(x = as.matrix(bbbDescr), y = logBBB)
+  list(x = model.matrix(~. - 1, bbbDescr), y = logBBB)
 }
 
 real_BostonHousing = function(prefix = "./real_data/") {
-  destfolder = paste0(prefix, "BostonHousing/")
-  destfile = paste0(destfolder, "Boston.csv")
+  destfolder = file.path(prefix, "BostonHousing/")
+  destfile = file.path(destfolder, "Boston.csv")
   if (!file.exists(destfile)) {
     if (!dir.exists(destfolder))
       dir.create(destfolder, recursive = T)
     download_with_retry(lst_real_data[["BostonHousing"]][3], destfile)
   }
-  df = read.csv(paste0(prefix, "BostonHousing/Boston.csv"))
-  list(x = as.matrix(df[, -ncol(df)]),
+  df = read.csv(file.path(prefix, "BostonHousing/Boston.csv"))
+  list(x = model.matrix(~. - 1, df[, -ncol(df)]), # introduce dummy variable for categorical variables
        y = log(df$medv))
 }
 
 real_CaliforniaHousing = function(prefix = "./real_data/") {
-  destfolder = paste0(prefix, "CaliforniaHousing/")
-  destfile = paste0(destfolder, "cadata.txt")
+  destfolder = file.path(prefix, "CaliforniaHousing/")
+  destfile = file.path(destfolder, "cadata.txt")
   if (!file.exists(destfile)) {
     if (!dir.exists(destfolder))
       dir.create(destfolder, recursive = T)
     download_with_retry(lst_real_data[["CaliforniaHousing"]][3], destfile)
   }
-  df = read.table(paste0(prefix, "CaliforniaHousing/cadata.txt"), skip = 27)
-  list(x = as.matrix(df[, -1]),
+  df = read.table(file.path(prefix, "CaliforniaHousing/cadata.txt"), skip = 27)
+  list(x = model.matrix(~. - 1, df[, -1]),
        y = log(df[, 1]))
 }
 
