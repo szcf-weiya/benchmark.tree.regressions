@@ -8,13 +8,10 @@ df = para.benchmark(c("sim_friedman", "sim_checkerboard", "sim_linear", "sim_max
 )
 saveRDS(df, "benchmark-tree-regressions/res-action.rds")
 
-df_real = benchmark(c("real_BostonHousing","real_CaliforniaHousing",
-                      "real_CASP", "real_Energy",
-                      "real_AirQuality", "real_BiasCorrection",
-                      "real_ElectricalStability", "real_GasTurbine",
-                      "real_ResidentialBuilding", "real_LungCancerGenomic",
-                      "real_StructureActivity", "real_BloodBrain"),
-                      #"real_GSE65904"),
+source("benchmark-tree-regressions/choices.real.data.R")
+lst_funcs = paste0("real_", names(choices.real.data))
+
+df_real = benchmark(lst_funcs,
                lst_methods, lst_methods_paras,
                arr_structures = c(""),
                ns = c(0),

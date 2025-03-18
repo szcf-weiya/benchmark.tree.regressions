@@ -1,6 +1,8 @@
 name: Run Scripts
 
-on: [push]
+on:
+  push:
+  pull_request:
 
 # Define the workflow jobs
 jobs:
@@ -80,7 +82,7 @@ jobs:
         path: "site"
 
   deploy:
-    if: github.ref == 'refs/heads/master'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     needs: build
 
     # Grant GITHUB_TOKEN the permissions required to make a Pages deployment

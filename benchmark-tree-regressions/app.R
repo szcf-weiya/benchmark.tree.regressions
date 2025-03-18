@@ -12,25 +12,14 @@ library(bslib)
 #library(ggplot2) # (try to reduce loading time?)
 library(plotly)
 
+source("choices.real.data.R")
 choices.data.model = c(Friedman = "sim_friedman",
                        Checkerboard = "sim_checkerboard",
                        Linear = "sim_linear",
                        Max = "sim_max",
                        SingleIndex = "sim_singleIndex")
 choices.x.structure = c(Independent = "indep", `AR(1)` = "ar1", `AR(1)+` = "ar1+", Factor = "factor")
-choices.real.data = c(
-                      BostonHousing = 'BostonHousing',
-                      CaliforniaHousing = 'CaliforniaHousing',
-                      CASP = "CASP",
-                      Energy = "Energy",
-                      AirQuality = "AirQuality",
-                      BiasCorrection = "BiasCorrection",
-                      ElectricalStability = "ElectricalStability",
-                      GasTurbine = "GasTurbine",
-                      ResidentialBuilding = "ResidentialBuilding",
-                      LungCancerGenomic = "LungCancerGenomic",
-		      StructureActivity = "StructureActivity",
-		      BloodBrain = "BloodBrain")
+
 choices.real.data.local = c(choices.real.data,
                             GSE65904 = "GSE65904")
 setup_html = HTML("<p>All data-generating processes are homoscedastic additive error models: $$Y = f(X) + \\epsilon$$</p>

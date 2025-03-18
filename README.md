@@ -90,9 +90,10 @@ $ R
 
 ## How to Contribute?
 
-> TODO: automate the procedure
+**Automated Way:** open an issue with title `@new-csv DataName URL Idx_of_Y`
 
-### Add a real data
+<details><summary>Step by Step: Add a real data</summary>
+<p>
 
 1. add data info into `lst_real_data` in `datasets.R`, and write out a meta data
 
@@ -100,14 +101,16 @@ $ R
 real.data.meta = df_data_meta()
 saveRDS(real.data.meta, file = "benchmark-tree-regressions/real-data-meta.rds")
 ```
-  
+
 2. run `print_to_readme()` to update the table in this `README.md` file
   
 3. add the preparation step for the data (starting from downloading the data) as a function `real_XXX` in `datasets.R`
 
-4. update the choices of down-menu in `app.R`
+4. update the list of real data `benchmark-tree-regressions/choices.real.data.R`
 
-5. update the execution code in `run-local.R` and `run-action.R`
+</p>
+</details> 
+
 
 
 
