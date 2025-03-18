@@ -1,8 +1,8 @@
 name: Bot for New CSV data
 
 on:
-  issue_comment:
-    types: [created]
+  issues:
+    types: [opened]
 
 jobs:
   create-pr:
