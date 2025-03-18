@@ -347,3 +347,21 @@ real_GSE65904 = function() {
   x = log2(x + 1) # normalize
   list(x = x, y = y)
 }
+
+
+## ---- generate via generate_new_csv_function ---- ##
+real_abalone = function(prefix = "./real_data/") {
+  destfolder = file.path(prefix, "abalone")
+  destfile = file.path(destfolder, "data.csv")
+  if (!file.exists(destfile)) {
+    if (!dir.exists(destfolder))
+      dir.create(destfolder, recursive = T)
+    download_with_retry("https://raw.githubusercontent.com/jbrownlee/Datasets/refs/heads/master/abalone.csv", destfile)
+  }
+  # assume no header
+  # header name is separate in this dataset repo: https://github.com/jbrownlee/Datasets
+  df = read.csv(destfile, header = FALSE)
+  list(x = model.matrix(~. -1, df[, -9]),
+       y = df[,9])
+}
+          
