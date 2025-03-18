@@ -4,6 +4,10 @@ on:
   issues:
     types: [opened]
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   create-pr:
     if: contains(github.event.issue.title, '@new-csv')
