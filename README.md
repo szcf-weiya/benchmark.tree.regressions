@@ -6,13 +6,13 @@ The respiratory is partially inspired by [benchopt](https://github.com/benchopt/
 
 ## :exclamation::exclamation::robot: Bot `@new-csv` :exclamation::exclamation:
 
-This repository supports an automated GitHub Action bot that listens for issues with title 
+This repository supports an automated GitHub Action bot that listens for issues with the title 
 
 ```shell
 @new-csv DataName DataURL Idx_of_Y
 ```
 
-The bot will create a new commit and open a pull request to add a new data for benchmarking automatically. For example, [Issue ]() with the following title will add the [abalone](https://raw.githubusercontent.com/jbrownlee/Datasets/refs/heads/master/abalone.csv) dataset for benchmarking.
+The bot will create a new commit and open a pull request to add new data for benchmarking automatically. For example, [Issue #39](https://github.com/szcf-weiya/benchmark.tree.regressions/issues/39) triggers [Pull Request #38](https://github.com/szcf-weiya/benchmark.tree.regressions/pull/38), which adds the [abalone](https://raw.githubusercontent.com/jbrownlee/Datasets/refs/heads/master/abalone.csv) dataset for benchmarking.
 
 ```shell
 @new-csv abalone https://raw.githubusercontent.com/jbrownlee/Datasets/refs/heads/master/abalone.csv 9
