@@ -1,5 +1,7 @@
 # Benchmarking Tree Regressions
 
+[![:robot: Bot for New CSV data](https://github.com/szcf-weiya/benchmark.tree.regressions/actions/workflows/new-csv.yaml/badge.svg)](https://github.com/szcf-weiya/benchmark.tree.regressions/actions/workflows/new-csv.yaml)
+
 The respiratory is partially inspired by [benchopt](https://github.com/benchopt/benchopt), but aimed for a more R-user-friendly, easily-hacking, more statistically benchmarking. 
 
 ## :exclamation::exclamation::robot: Bot `@new-csv` :exclamation::exclamation:

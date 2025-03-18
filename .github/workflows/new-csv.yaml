@@ -68,7 +68,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           base: master
-          commit-message: "add new csv ${{ env.DataName }}"
+          commit-message: "add new csv ${{ env.DataName }} #${{ github.event.issue.number }}"
           title: "add new csv ${{ env.DataName }}"
-          body: "add new csv ${{ env.DataName }}"
+          body: "add new csv ${{ env.DataName }} #${{ github.event.issue.number }}"
           branch: new-csv/update-${{ env.DataName }}
