@@ -77,4 +77,4 @@ jobs:
           commit-message: "add new csv ${{ env.DataName }}"
           title: "add new csv ${{ env.DataName }}"
           body: "add new csv ${{ env.DataName }}"
-          branch: new-csv/update-{{ env.DataName }}
+          branch: new-csv/update-${{ env.DataName }}

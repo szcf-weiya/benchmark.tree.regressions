@@ -10,13 +10,13 @@ This repository supports an automated GitHub Action bot that listens for issues 
 @new-csv DataName DataURL Idx_of_Y
 ```
 
-The bot will create a new commit and open a pull request to add a new data for benchmarking automatically. For example, []().
+The bot will create a new commit and open a pull request to add a new data for benchmarking automatically. For example, [Issue ]() with the following title will add the [abalone](https://raw.githubusercontent.com/jbrownlee/Datasets/refs/heads/master/abalone.csv) dataset for benchmarking.
 
 ```shell
 @new-csv abalone https://raw.githubusercontent.com/jbrownlee/Datasets/refs/heads/master/abalone.csv 9
 ```
 
-The response variable is the 9-th column, so `Idx_of_Y = 9`. (Currently, assume the no header column names.)
+The response variable is the 9-th column, so `Idx_of_Y = 9`. (Currently, assume no header column names.)
 
 ## :evergreen_tree: What is the Repo Structure?
 
