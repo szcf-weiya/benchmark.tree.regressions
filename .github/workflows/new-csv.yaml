@@ -33,8 +33,6 @@ jobs:
           echo "DataURL=$DataURL" >> $GITHUB_ENV
           echo "DataY=$DataY" >> $GITHUB_ENV
 
-      - name: Generate R function
-        run: |
           cat <<EOF >> R/datasets.R
 
 # ---- Appended by @new-csv ----
