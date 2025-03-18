@@ -254,7 +254,7 @@ real_GasTurbine = function(prefix = "./real_data/") {
   destfile = file.path(prefix, "GasTurbine/", "gt_2011.csv")
   df = read.csv(destfile)
   for (i in 2012:2015) {
-    destfile = file.path(prefix, "GasTurbine/", "gt_", i, ".csv")
+    destfile = file.path(prefix, "GasTurbine/", paste0("gt_", i, ".csv"))
     tmp = read.csv(destfile)
     df = rbind(df, tmp)
   }
@@ -292,8 +292,8 @@ real_StructureActivity = function(prefix = "./real_data/") {
   tarfile = file.path(prefix, "/StructureActivity/drug_data")
   tarfolder = file.path(prefix, "/StructureActivity/")
   datafolder = file.path(tarfolder, "data/triazines/reg/")
-  target_train_file = file.path(datafolder, "tr60_", 0, ".dat")
-  target_test_file = file.path(datafolder, "te60_", 0, ".dat")
+  target_train_file = file.path(datafolder, paste0("tr60_", 0, ".dat"))
+  target_test_file = file.path(datafolder, paste0("te60_", 0, ".dat"))
   if (!(file.exists(target_test_file) && file.exists(target_test_file))) {
     system(paste0("tar xf ", tarfile, " -C ", tarfolder))
     system(paste0("gzip -d -f ", tarfolder, "data/triazines/reg/*.Z"))
