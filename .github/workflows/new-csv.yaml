@@ -63,14 +63,7 @@ jobs:
           DataURL: ${{ env.DataURL }}
           DataY: ${{ env.DataY }}
 
-      - name: Create commit
-        run: |
-          git checkout -b new-csv/update-${{ env.DataName }}
-          git add .
-          git commit -m "add new csv ${{ env.DataName }}"
-          git push origin new-csv/update-${{ env.DataName }}
-
-      - name: Create pull request
+      - name: Create commit & pull request
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
