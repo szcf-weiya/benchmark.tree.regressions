@@ -2,6 +2,10 @@
 
 The respiratory is partially inspired by [benchopt](https://github.com/benchopt/benchopt), but aimed for a more R-user-friendly, easily-hacking, more statistically benchmarking. 
 
+## :exclamation::exclamation::robot: Bot `@new-csv` :exclamation::exclamation:
+
+This repository supports an automated GitHub Action bot that listens for issues with title `@new-csv DataName URL Idx_of_Y`. The bot will create a new commit and open a pull request to add a new data for benchmarking automatically. For example, []().
+
 ## :evergreen_tree: What is the Repo Structure?
 
 ### Source Files

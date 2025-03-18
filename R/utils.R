@@ -1,4 +1,5 @@
 generate_new_csv_function = function(DataName, DataURL, DataY) {
+  DataY = as.integer(DataY)
   sprintf('
 
   ## ---- generate via generate_new_csv_function ---- ##
