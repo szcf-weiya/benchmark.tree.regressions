@@ -74,6 +74,7 @@ jobs:
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          base: master
           commit-message: "add new csv ${{ env.DataName }}"
           title: "add new csv ${{ env.DataName }}"
           body: "add new csv ${{ env.DataName }}"
