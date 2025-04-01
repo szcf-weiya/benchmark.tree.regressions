@@ -9,8 +9,11 @@ jobs:
   debug:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Event name: ${{ github.event_name }}"
-      - run: echo "PR title: ${{ github.event.pull_request.title }}"
+      - name: Print Info
+        run: |
+          echo "Event name: ${{ github.event_name }}"
+          echo "PR title: ${{ github.event.pull_request.title }}"
+
   build:
     if: |
       (github.event_name == 'push' && !contains(github.event.head_commit.message, '[skip ci]')) ||
