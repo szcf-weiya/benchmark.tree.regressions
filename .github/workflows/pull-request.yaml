@@ -1,0 +1,10 @@
+name: Run on Pull Request
+
+on:
+  workflow_run:
+    workflows: ["Bot for New CSV Data"]
+    types: [completed]
+
+jobs:
+  call-scripts:
+    uses: ./.github/workflows/run-scripts.yaml

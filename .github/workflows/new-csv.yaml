@@ -1,4 +1,4 @@
-name: Bot for New CSV data
+name: Bot for New CSV Data
 
 on:
   issues:

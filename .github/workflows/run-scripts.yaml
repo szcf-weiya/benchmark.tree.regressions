@@ -1,8 +1,7 @@
 name: Run Scripts
 
 on:
-  push:
-  pull_request:
+  workflow_call:
 
 # Define the workflow jobs
 jobs:

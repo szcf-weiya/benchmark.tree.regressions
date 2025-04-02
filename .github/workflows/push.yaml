@@ -1,0 +1,8 @@
+name: Run on Push
+
+on:
+  push:
+
+jobs:
+  call-scripts:
+    uses: ./.github/workflows/run-scripts.yaml
