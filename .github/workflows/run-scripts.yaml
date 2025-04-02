@@ -57,6 +57,9 @@ jobs:
       shell: Rscript {0}
 
     - name: Run R script
+      if: |
+        (github.event_name == 'push' && !contains(github.event.head_commit.message, '[skip run]')) ||
+        (github.event_name == 'pull_request' && !contains(github.event.pull_request.title, '[skip run]'))
       run: |
         Rscript run-action.R
 
@@ -83,6 +86,7 @@ jobs:
       shell: Rscript {0}
       run: |
         renv::install("posit-dev/r-shinylive")
+        renv::install("markdown@1.13")
         shinylive::export("benchmark-tree-regressions/", "site")
 
     - name: Upload site artifact
