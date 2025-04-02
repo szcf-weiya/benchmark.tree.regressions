@@ -5,6 +5,10 @@ on:
     workflows: ["Bot for New CSV Data"]
     types: [completed]
 
+permissions:
+  pages: write
+  id-token: write
+
 jobs:
   call-scripts:
     uses: ./.github/workflows/run-scripts.yaml

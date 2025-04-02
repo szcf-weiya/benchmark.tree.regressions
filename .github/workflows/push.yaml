@@ -3,6 +3,10 @@ name: Run on Push
 on:
   push:
 
+permissions:
+  pages: write
+  id-token: write
+
 jobs:
   call-scripts:
     uses: ./.github/workflows/run-scripts.yaml
