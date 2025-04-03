@@ -411,15 +411,15 @@ server <- function(input, output) {
   })
   fun_formula = function(x) {
     if (x == "sim_friedman") {
-      withMathJax(HTML("$$y = 10\\sin(\\pi x_1x_2) + 20(x_3-0.5)^2 + 10x_4 + 5x_5 + N(0, 1)$$"))
+      withMathJax(HTML("$$f(x) = 10\\sin(\\pi x_1x_2) + 20(x_3-0.5)^2 + 10x_4 + 5x_5$$"))
     } else if (x == "sim_checkerboard") {
-      withMathJax(HTML("$$y = 2x_{1}x_{2} + 2x_{3}x_{4} + N(0, 1)$$"))
+      withMathJax(HTML("$$f(x) = 2x_{1}x_{2} + 2x_{3}x_{4}$$"))
     } else if (x == "sim_linear") {
-      withMathJax(HTML("$$y = 2x_{1} + 2x_{2} + 4x_{3} + N(0, 1)$$"))
+      withMathJax(HTML("$$f(x) = 2x_{1} + 2x_{2} + 4x_{3}$$"))
     } else if (x == "sim_max") {
-      withMathJax(HTML("$$y = \\max(x_1, x_2, x_3) + N(0, 1)$$"))
+      withMathJax(HTML("$$f(x) = \\max(x_1, x_2, x_3)$$"))
     } else if (x == "sim_singleIndex") {
-      withMathJax(HTML("$$y = 10\\sqrt{a} + \\sin(5a); a = \\sum_{j=1}^{10}(x_j - \\gamma_j)^2; \\gamma_j = -1.5 + \\frac{j-1}{3}$$"))
+      withMathJax(HTML("$$f(x) = 10\\sqrt{a} + \\sin(5a); a = \\sum_{j=1}^{10}(x_j - \\gamma_j)^2; \\gamma_j = -1.5 + \\frac{j-1}{3}$$"))
     }
   }
   fun_formula_x = function(x) {
