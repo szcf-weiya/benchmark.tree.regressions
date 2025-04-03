@@ -12,7 +12,7 @@ library(bslib)
 #library(ggplot2) # (try to reduce loading time?)
 library(plotly)
 
-source("choices.real.data.R")
+source("lst_real_data.R")
 choices.data.model = c(Friedman = "sim_friedman",
                        Checkerboard = "sim_checkerboard",
                        Linear = "sim_linear",
@@ -20,8 +20,9 @@ choices.data.model = c(Friedman = "sim_friedman",
                        SingleIndex = "sim_singleIndex")
 choices.x.structure = c(Independent = "indep", `AR(1)` = "ar1", `AR(1)+` = "ar1+", Factor = "factor")
 
-choices.real.data.local = c(choices.real.data,
-                            GSE65904 = "GSE65904")
+# load lst_real_data
+choices.real.data.local = unlist(lapply(lst_real_data, `[`, 1))
+choices.real.data = choices.real.data.local[-which(names(choices.real.data.local) == "GSE65904")]
 setup_html = HTML("<p>All data-generating processes are homoscedastic additive error models: $$Y = f(X) + \\epsilon$$</p>
                           <p>Given $n$ samples and $p$ features, the input data is $$\\mathbf{X}\\in {\\mathrm{I\\!R}}^{n\\times p}, y\\in {\\mathrm{I\\!R}}^n$$</p>
                           <p>Here we consider $\\epsilon \\sim N(0, 1)$, and vary the <strong>covariance structure of $X$</strong> and the <strong>data model $f$</strong> (you can select from the below drop-down menu):</p>")

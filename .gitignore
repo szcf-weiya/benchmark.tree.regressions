@@ -9,3 +9,4 @@ benchmark-tree-regressions/res-debug.rds
 benchmark-tree-regressions/res-debug-real.rds
 run-debug.R
 real_data
+catboost_info

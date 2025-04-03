@@ -47,9 +47,10 @@ jobs:
           DataName = Sys.getenv("DataName")
           DataURL = Sys.getenv("DataURL")
           DataY = Sys.getenv("DataY")
-          source("benchmark-tree-regressions/choices.real.data.R")
-          choices.real.data[[DataName]] = DataName
-          dump("choices.real.data", file = "benchmark-tree-regressions/choices.real.data.R")
+          source("benchmark-tree-regressions/lst_real_data.R")
+          lst_real_data[[DataName]] = c(DataName, DataURL, DataURL)
+          lst_real_data = lst_real_data[order(names(lst_real_data))]
+          dump("lst_real_data", file = "benchmark-tree-regressions/lst_real_data.R")
           source("R/utils.R")
           cat(generate_new_csv_function(DataName, DataURL, DataY), file = "R/datasets.R", append = TRUE)
           ## not modified real.data.meta here, since it require more dependencies for R
