@@ -8,8 +8,8 @@ df = para.benchmark(c("sim_friedman", "sim_checkerboard", "sim_linear", "sim_max
 )
 saveRDS(df, "benchmark-tree-regressions/res-action.rds")
 
-source("benchmark-tree-regressions/choices.real.data.R")
-lst_funcs = paste0("real_", names(choices.real.data))
+exclude_real_data = c("GSE65904")
+lst_funcs = paste0("real_", setdiff(names(lst_real_data), exclude_real_data))
 
 df_real = benchmark(lst_funcs,
                lst_methods, lst_methods_paras,

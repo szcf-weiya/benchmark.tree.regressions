@@ -10,6 +10,7 @@ lst_methods = c(rep("bart_fit", 1),
                 rep("ranger_fit", 1),
                 rep("rf_fit", 1),
                 rep("xgboost_fit", 1),
+                rep("carboost_fit", 1),
                 "mean_fit")
 names_lst_methods = c("BART_100", #"BART_200", "BART_500",
                       "dbarts_100",
@@ -19,6 +20,7 @@ names_lst_methods = c("BART_100", #"BART_200", "BART_500",
                       "randomForest_100", #"randomForest_200", "randomForest_500",
                       # "XGBoost_100_NULL",
                       "XGBoost_100_3",
+                      "CarBoost_100",
                       "Baseline_mean")
 stopifnot(length(lst_methods) == length(names_lst_methods))
 names(lst_methods) = names_lst_methods
@@ -37,23 +39,21 @@ lst_methods_paras = list(list(ntree = 100), #list(ntree = 200), list(ntree = 500
                          list(ntree = 100), #list(ntree = 200), list(ntree = 500),
                          #list(nrounds = 1000, early_stopping_rounds = NULL),
                          list(nrounds = 1000, early_stopping_rounds = 3),
+                         list(num_trees = 100),
                          NULL)
 stopifnot(length(lst_methods) == length(lst_methods_paras))
 
 
-#df = para.benchmark(c("sim_friedman", "sim_checkerboard", "sim_linear", "sim_max", "sim_singleIndex"),
-#               lst_methods, lst_methods_paras,
-#               arr_structures = c("indep", "ar1", "ar1+", "factor"),
-#               ns = c(100, 200, 500, 1000),
-#               ps = c(20, 50, 100, 200),
-#               ncores = 10
-#)
-#saveRDS(df, "benchmark-tree-regressions/res-hpc.rds")
+df = para.benchmark(c("sim_friedman", "sim_checkerboard", "sim_linear", "sim_max", "sim_singleIndex"),
+              lst_methods, lst_methods_paras,
+              arr_structures = c("indep", "ar1", "ar1+", "factor"),
+              ns = c(100, 200, 500, 1000),
+              ps = c(20, 50, 100, 200),
+              ncores = 10
+)
+saveRDS(df, "benchmark-tree-regressions/res-hpc.rds")
 
-source("benchmark-tree-regressions/choices.real.data.R")
-lst_funcs = paste0("real_", names(choices.real.data))
-# only local
-lst_funcs = c(lst_funcs, "real_GSE65904")
+lst_funcs = paste0("real_", names(lst_real_data))
 df_real = benchmark(lst_funcs,
                     lst_methods, lst_methods_paras,
                     arr_structures = c(""),
