@@ -21,7 +21,8 @@ choices.data.model = c(Friedman = "sim_friedman",
 choices.x.structure = c(Independent = "indep", `AR(1)` = "ar1", `AR(1)+` = "ar1+", Factor = "factor")
 
 # load lst_real_data
-choices.real.data.local = unlist(lapply(lst_real_data, `[`, 1))
+choices.real.data.local = names(lst_real_data)
+names(choices.real.data.local) = choices.real.data.local
 choices.real.data = choices.real.data.local[-which(names(choices.real.data.local) == "GSE65904")]
 setup_html = HTML("<p>All data-generating processes are homoscedastic additive error models: $$Y = f(X) + \\epsilon$$</p>
                           <p>Given $n$ samples and $p$ features, the input data is $$\\mathbf{X}\\in {\\mathrm{I\\!R}}^{n\\times p}, y\\in {\\mathrm{I\\!R}}^n$$</p>
