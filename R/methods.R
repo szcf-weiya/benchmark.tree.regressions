@@ -44,6 +44,16 @@ xgboost_fit = function(x, y, xtest, nrounds = 100, early_stopping_rounds = NULL)
   ypred
 }
 
+# renv::install('https://github.com/catboost/catboost/releases/download/v1.2.7/catboost-R-linux-x86_64-1.2.7.tgz', INSTALL_opts = c("--no-multiarch", "--no-test-load"))
+carboost_fit = function(x, y, xtest, num_trees = 1000) {
+  train_pool = catboost::catboost.load_pool(data = x, label = y)
+  test_pool = catboost::catboost.load_pool(xtest)
+  model = catboost::catboost.train(train_pool, NULL, params = list(iterations = num_trees,
+                                                                   verbose = 100))
+  ypred = catboost::catboost.predict(model, test_pool)
+  ypred
+}
+
 ranger_fit = function(x, y, xtest, num.trees = 500) {
   df = data.frame(x, y)
   # use the standard practice: mtry = [p / 3]

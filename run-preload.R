@@ -1,3 +1,4 @@
+source("benchmark-tree-regressions/lst_real_data.R")
 source("R/datasets.R")
 source("R/evaluate.R")
 source("R/methods.R")
@@ -9,6 +10,7 @@ lst_methods = c(rep("bart_fit", 3),
                 rep("ranger_fit", 3),
                 rep("rf_fit", 3),
                 rep("xgboost_fit", 1),
+                rep("carboost_fit", 1),
                 "mean_fit")
 names_lst_methods = c("BART_50", "BART_100", "BART_200",
                       "dbarts_50", "dbarts_100", "dbarts_200",
@@ -18,6 +20,7 @@ names_lst_methods = c("BART_50", "BART_100", "BART_200",
                        "randomForest_50", "randomForest_100", "randomForest_200",
                       # "XGBoost_100_NULL",
                       "XGBoost_100_3",
+                      "CarBoost_100",
                       "Baseline_mean")
 stopifnot(length(lst_methods) == length(names_lst_methods))
 names(lst_methods) = names_lst_methods
@@ -36,5 +39,6 @@ lst_methods_paras = list(list(ntree = 50), list(ntree = 100), list(ntree = 200),
                          list(ntree = 50), list(ntree = 100), list(ntree = 200),
                          #list(nrounds = 1000, early_stopping_rounds = NULL),
                          list(nrounds = 1000, early_stopping_rounds = 3),
+                         list(num_trees = 100),
                          NULL)
 stopifnot(length(lst_methods) == length(lst_methods_paras))

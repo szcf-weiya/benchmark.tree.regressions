@@ -419,6 +419,17 @@
       ],
       "Hash": "528692344d5a174552e3bf7acdfbaebd"
     },
+    "catboost": {
+      "Package": "catboost",
+      "Version": "1.2.7",
+      "Source": "URL",
+      "RemoteType": "url",
+      "RemoteUrl": "https://github.com/catboost/catboost/releases/download/v1.2.7/catboost-R-linux-x86_64-1.2.7.tgz",
+      "Requirements": [
+        "jsonlite"
+      ],
+      "Hash": "4336c9e41a93abb5286fd87571c9f6b4"
+    },
     "cellranger": {
       "Package": "cellranger",
       "Version": "1.1.0",
