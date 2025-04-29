@@ -39,4 +39,6 @@ list(abalone = c("Predicting the age of abalone from physical measurements.",
 "https://archive.ics.uci.edu/static/public/85/qualitative+structure+activity+relationships.zip"
 ), WineQualityRed = c("WineQualityRed", "https://raw.githubusercontent.com/jbrownlee/Datasets/refs/heads/master/winequality-red.csv", 
 "https://raw.githubusercontent.com/jbrownlee/Datasets/refs/heads/master/winequality-red.csv"
+), WineQualityWhite = c("WineQualityWhite", "https://raw.githubusercontent.com/jbrownlee/Datasets/refs/heads/master/winequality-white.csv", 
+"https://raw.githubusercontent.com/jbrownlee/Datasets/refs/heads/master/winequality-white.csv"
 ))

@@ -338,3 +338,21 @@ real_WineQualityRed = function(prefix = "./real_data/") {
        y = df[,12])
 }
 
+
+
+## ---- generate via generate_new_csv_function ---- ##
+real_WineQualityWhite = function(prefix = "./real_data/") {
+  destfolder = file.path(prefix, "WineQualityWhite")
+  destfile = file.path(destfolder, "data.csv")
+  if (!file.exists(destfile)) {
+    if (!dir.exists(destfolder))
+      dir.create(destfolder, recursive = T)
+    download_with_retry("https://raw.githubusercontent.com/jbrownlee/Datasets/refs/heads/master/winequality-white.csv", destfile)
+  }
+  # assume no header
+  # header name is separate in this dataset repo: https://github.com/jbrownlee/Datasets
+  df = read.csv(destfile, header = FALSE)
+  list(x = model.matrix(~. -1, df[, -12]),
+       y = df[,12])
+}
+          
