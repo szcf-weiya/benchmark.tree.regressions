@@ -93,17 +93,16 @@ Next, you can check the scripts [`run-local.R`](run-local.R) and [`run-action.R`
 
 Due to the limited computational resources, [`run-action.R`](run-action.R) take shorter time to finish.
 
-### Yale Mccelary HPC
+### MyServer@ZJU
 
 Specifically, the current local results are run on the Yale Mccelary HPC.
 
 ```bash
-$ module load R/4.2.0-foss-2020b
 $ R
 > renv::restore() # restore packages from the lockfile
 > system.time({source("run-local.R")})
-      user     system    elapsed
-518757.236   6565.216  59712.296
+     user    system   elapsed 
+207084.40  56119.33 107226.75 
 ```
 
 ## How to Contribute?
