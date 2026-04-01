@@ -85,7 +85,7 @@ jobs:
     - name: Build site
       shell: Rscript {0}
       run: |
-        renv::install("posit-dev/r-shinylive@0.2.0")
+        renv::install("posit-dev/r-shinylive@v0.2.0")
         shinylive::export("benchmark-tree-regressions/", "site", assets_version = "0.5.0")
 
     - name: Upload site artifact
