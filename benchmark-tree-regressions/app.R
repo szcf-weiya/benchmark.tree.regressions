@@ -390,6 +390,15 @@ server <- function(input, output) {
     df.local.real = readRDS("res-hpc-real.rds") # the first time is just copied from res-debug-real.rds
     df.local.real$group = sapply(as.character(df.local.real$method), function(x) strsplit(x, "_")[[1]][1])
   }
+  method_groups = unique(c(
+    as.character(df.action$group),
+    as.character(df.action.real$group),
+    as.character(df.local.real$group)
+  ))
+  method_group_colors = grDevices::hcl.colors(length(method_groups), "Dark 3")
+  df.action$group = factor(df.action$group, levels = method_groups)
+  df.action.real$group = factor(df.action.real$group, levels = method_groups)
+  df.local.real$group = factor(df.local.real$group, levels = method_groups)
   df0 = eventReactive(c(input$data.action.x, input$data.action), {
     req(input$data.action)
     req(input$data.action.x)
@@ -502,24 +511,24 @@ server <- function(input, output) {
       HTML(paste0("<p>&#10071; <strong>Warnings: </strong>", paste0(na_methods, collapse = " "), " failed.</p>"))
   })
   output$ly_errplot_action = renderPlotly({
-    plot_ly(df0(), x = ~method, y=~cv.error, type = "bar", color = ~group) %>% layout(barmode = "stack")
+    plot_ly(df0(), x = ~method, y=~cv.error, type = "bar", color = ~group, colors = method_group_colors) %>% layout(barmode = "stack")
   })
   output$ly_timeplot_action = renderPlotly({
-    plot_ly(df0(), x = ~method, y=~runtime, type = "bar", color = ~group) %>% layout(barmode = "stack")
+    plot_ly(df0(), x = ~method, y=~runtime, type = "bar", color = ~group, colors = method_group_colors) %>% layout(barmode = "stack")
   })
 
   output$ly_errplot_action_real = renderPlotly({
-    plot_ly(df0.real(), x = ~method, y=~cv.error, type = "bar", color = ~group) %>% layout(barmode = "stack")
+    plot_ly(df0.real(), x = ~method, y=~cv.error, type = "bar", color = ~group, colors = method_group_colors) %>% layout(barmode = "stack")
   })
   output$ly_timeplot_action_real = renderPlotly({
-    plot_ly(df0.real(), x = ~method, y=~runtime, type = "bar", color = ~group) %>% layout(barmode = "stack")
+    plot_ly(df0.real(), x = ~method, y=~runtime, type = "bar", color = ~group, colors = method_group_colors) %>% layout(barmode = "stack")
   })
 
   output$ly_errplot_real = renderPlotly({
-    plot_ly(df1.real(), x = ~method, y=~cv.error, type = "bar", color = ~group) %>% layout(barmode = "stack")
+    plot_ly(df1.real(), x = ~method, y=~cv.error, type = "bar", color = ~group, colors = method_group_colors) %>% layout(barmode = "stack")
   })
   output$ly_timeplot_real = renderPlotly({
-    plot_ly(df1.real(), x = ~method, y=~runtime, type = "bar", color = ~group) %>% layout(barmode = "stack")
+    plot_ly(df1.real(), x = ~method, y=~runtime, type = "bar", color = ~group, colors = method_group_colors) %>% layout(barmode = "stack")
   })
   # output$errplot <- renderPlot({
   #   ggplot(df1(), aes(x = n, y = cv.error, shape = method, color = as.factor(p))) + geom_point(size = 3) + geom_line() + plot_theme

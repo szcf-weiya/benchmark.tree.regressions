@@ -56,6 +56,9 @@ jobs:
         renv::restore()  # Restores packages from the lockfile (if using renv)
       shell: Rscript {0}
 
+    - name: Run regression tests
+      run: Rscript tests/test-bart-constant-columns.R
+
     - name: Run R script
       if: |
         (github.event_name == 'push' && !contains(github.event.head_commit.message, '[skip run]')) ||
@@ -85,8 +88,11 @@ jobs:
     - name: Build site
       shell: Rscript {0}
       run: |
-        renv::install("posit-dev/r-shinylive@v0.2.0")
-        shinylive::export("benchmark-tree-regressions/", "site", assets_version = "0.5.0")
+        renv::install(c(
+          "S7@0.2.0",
+          "https://github.com/posit-dev/r-shinylive/archive/refs/tags/v0.4.0.tar.gz"
+        ))
+        shinylive::export("benchmark-tree-regressions/", "site")
 
     - name: Upload site artifact
       if: github.ref == 'refs/heads/master'
